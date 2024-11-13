@@ -109,7 +109,7 @@ jobs:
       configuration: ${{ matrix.configuration }}
       target: ${{ matrix.target }}
 
-      dotnet-version: '8.x'
+      dotnet-version: '9.x'
 
     steps:
       - name: Checkout
