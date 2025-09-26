@@ -28,8 +28,11 @@ namespace Tuvi.App.ViewModels
 {
     public abstract class BaseAddressSettingsPageViewModel : BaseViewModel, IDisposable
     {
-        protected class NeedAdditionalAuthInfo : Exception
+        public class NeedAdditionalAuthInfo : Exception
         {
+            public NeedAdditionalAuthInfo(string message) : base(message)
+            {
+            }
         }
 
         private bool _isWaitingResponse;
