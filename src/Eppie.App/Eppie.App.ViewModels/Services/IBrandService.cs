@@ -23,6 +23,7 @@ namespace Tuvi.App.ViewModels.Services
         string GetName();
         string GetSupport();
         string GetHomepage();
+        string GetLicense();
         string GetPublisherDisplayName();
         string GetAppVersion();
         string GetVersion();
@@ -32,5 +33,6 @@ namespace Tuvi.App.ViewModels.Services
         string GetDevelopmentSupport();
         string GetTwitterHandle();
         string GetGitHubUrl();
+        string GetTranslation();
     }
 }

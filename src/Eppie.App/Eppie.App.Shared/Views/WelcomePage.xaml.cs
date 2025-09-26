@@ -32,7 +32,7 @@ namespace Tuvi.App.Shared.Views
             get
             {
                 var brand = new BrandLoader();
-                return brand.GetLicenseLink();
+                return brand.GetLicense();
             }
         }
 

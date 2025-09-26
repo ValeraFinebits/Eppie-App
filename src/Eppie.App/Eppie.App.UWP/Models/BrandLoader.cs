@@ -16,147 +16,58 @@
 //                                                                              //
 // ---------------------------------------------------------------------------- //
 
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using Tuvi.App.ViewModels.Services;
 using Windows.ApplicationModel;
 
 namespace Tuvi.App.Shared.Models
 {
-    class BrandInfo
+    internal class BrandLoader : BrandLoaderBase
     {
-        public Dictionary<string, string> Values;
-    }
-
-    class Loader_Eppie : BrandInfo
-    {
-        public static readonly string[] NameIds = new string[] { "<NAMEID>", "<NAMEID>" };
-        public Loader_Eppie()
+        internal BrandLoader() : base(CreateBrandInfo())
         {
-            Values = new Dictionary<string, string>()
-            {
-                {"AppName", "Eppie (preview)"},
-                {"Support", "beta@eppie.io"},
-                {"Homepage", "https://eppie.io"},
-                {"License", "https://eppie.io"},
-                {"DevelopmentSupport", "https://github.com/sponsors/Eppie-io"},
-                {"TwitterHandle", "@EppieApp"},
-                {"GitHubUrl", "https://github.com/Eppie-io/Eppie-App"}
-            };
         }
-    }
 
-    class Loader_Eppie_Dev : BrandInfo
-    {
-        public static readonly string[] NameIds = new string[] { "<NAMEID>", "<NAMEID>" };
-        public Loader_Eppie_Dev()
-        {
-            Values = new Dictionary<string, string>()
-            {
-                {"AppName", "Eppie (development)"},
-                {"Support", "beta@eppie.io"},
-                {"Homepage", "https://eppie.io"},
-                {"License", "https://eppie.io"},
-                {"DevelopmentSupport", "https://github.com/sponsors/Eppie-io"},
-                {"TwitterHandle", "@EppieApp"},
-                {"GitHubUrl", "https://github.com/Eppie-io/Eppie-App"}
-            };
-        }
-    }
-
-    internal class BrandLoader : IBrandService
-    {
-        private readonly BrandInfo _loader;
-        internal BrandLoader()
+        private static BrandInfo CreateBrandInfo()
         {
             if (Loader_Eppie.NameIds.Contains(Package.Current.Id.Name))
             {
-                _loader = new Loader_Eppie();
+                return new Loader_Eppie();
             }
             else
             {
-                _loader = new Loader_Eppie_Dev();
+                return new Loader_Eppie_Dev();
             }
         }
 
-        internal string GetString(string key)
-        {
-            if (_loader.Values.TryGetValue(key, out var res))
-            {
-                return res;
-            }
-            else
-            {
-                Debug.Assert(false, $"Brand key '{key}' is not found");
-                return default;
-            }
-        }
-
-        public string GetName()
-        {
-            return GetString("AppName");
-        }
-
-        public string GetSupport()
-        {
-            return GetString("Support");
-        }
-
-        public string GetLicenseLink()
-        {
-            return GetString("License");
-        }
-
-        public string GetHomepage()
-        {
-            return GetString("Homepage");
-        }
-
-        public string GetPublisherDisplayName()
+        public override string GetPublisherDisplayName()
         {
             return Package.Current.PublisherDisplayName;
         }
 
-        public string GetVersion()
+        public override string GetVersion()
         {
             return Assembly.GetExecutingAssembly().GetName().Version?.ToString();
         }
 
-        public string GetPackageVersion()
+        public override string GetPackageVersion()
         {
             return $"{Package.Current.Id.Version.Major}.{Package.Current.Id.Version.Minor}.{Package.Current.Id.Version.Build}.{Package.Current.Id.Version.Revision}";
         }
 
-        public string GetFileVersion()
+        public override string GetFileVersion()
         {
             return Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyFileVersionAttribute>()?.Version;
         }
 
-        public string GetInformationalVersion()
+        public override string GetInformationalVersion()
         {
             return Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
         }
 
-        public string GetAppVersion()
+        public override string GetAppVersion()
         {
             return GetInformationalVersion() ?? GetVersion() ?? GetPackageVersion();
-        }
-
-        public string GetDevelopmentSupport()
-        {
-            return GetString("DevelopmentSupport");
-        }
-
-        public string GetTwitterHandle()
-        {
-            return GetString("TwitterHandle");
-        }
-
-        public string GetGitHubUrl()
-        {
-            return GetString("GitHubUrl");
         }
     }
 }
