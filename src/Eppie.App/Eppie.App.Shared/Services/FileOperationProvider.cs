@@ -102,7 +102,7 @@ namespace Eppie.App.Shared.Services
         {
             var files = await SelectFiles().ConfigureAwait(true);
 
-            var attachedFiles = await LoadFilesData(files).ConfigureAwait(true);
+            var attachedFiles = await LoadFilesData((IReadOnlyList<IStorageItem>)files).ConfigureAwait(true);
 
             return attachedFiles;
         }
