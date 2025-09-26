@@ -1,4 +1,4 @@
-﻿// ---------------------------------------------------------------------------- //
+// ---------------------------------------------------------------------------- //
 //                                                                              //
 //   Copyright 2025 Eppie (https://eppie.io)                                    //
 //                                                                              //
@@ -16,37 +16,17 @@
 //                                                                              //
 // ---------------------------------------------------------------------------- //
 
-using System.Linq;
-using Windows.ApplicationModel;
-
 namespace Tuvi.App.Shared.Models
 {
-    internal class BrandLoader : BrandLoaderBase
+    public enum BrandKey
     {
-        internal BrandLoader() : base(GetBrandInfo())
-        {
-        }
-
-        private static BrandInfo GetBrandInfo()
-        {
-            if (Loader_Eppie.NameIds.Contains(Package.Current.Id.Name))
-            {
-                return new Loader_Eppie();
-            }
-            else
-            {
-                return new Loader_Eppie_Dev();
-            }
-        }
-
-        public override string GetPublisherDisplayName()
-        {
-            return Package.Current.PublisherDisplayName;
-        }
-
-        public override string GetPackageVersion()
-        {
-            return $"{Package.Current.Id.Version.Major}.{Package.Current.Id.Version.Minor}.{Package.Current.Id.Version.Build}.{Package.Current.Id.Version.Revision}";
-        }
+        AppName,
+        Support,
+        Homepage,
+        License,
+        DevelopmentSupport,
+        TwitterHandle,
+        GitHub,
+        Translation
     }
 }

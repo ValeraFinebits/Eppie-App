@@ -23,6 +23,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Logging\LogConfiguration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\LoggingExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)StaticResources\BrandResource.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\BrandKey.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\BrandInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\BrandLoaderBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\NotificationManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\AIService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\AppStoreService.cs" />
