@@ -32,15 +32,13 @@ using TuviPgpLib.Entities;
 using Windows.ApplicationModel;
 using Tuvi.App.Shared.Models;
 using System.Runtime.InteropServices;
-using System.Diagnostics.CodeAnalysis;
-
 
 
 
 
 #if WINDOWS_UWP
 using Windows.UI.Xaml;
-#else
+#else 
 using Microsoft.UI.Xaml;
 #endif
 
@@ -216,7 +214,6 @@ namespace Tuvi.App.Shared.Services
             }
         }
 
-        [RequiresUnreferencedCode("Calls System.Exception.TargetSite")]
         private async Task ShowDefaultErrorMessageAsync(Exception exception)
         {
             var title = StringProvider.GetString("SendErrorReportTitle");

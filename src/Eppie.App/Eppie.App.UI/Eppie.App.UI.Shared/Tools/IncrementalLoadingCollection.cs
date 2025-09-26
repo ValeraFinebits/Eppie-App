@@ -25,12 +25,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using Tuvi.App.ViewModels;
 using Windows.Foundation;
-using System.Diagnostics.CodeAnalysis;
-
 
 #if WINDOWS_UWP
 using Windows.UI.Xaml.Data;
-#else
+#else 
 using Microsoft.UI.Xaml.Data;
 #endif
 
@@ -47,7 +45,7 @@ namespace Tuvi.App.IncrementalLoading
     /// </typeparam>
     /// <seealso cref="IIncrementalSource{TSource}"/>
     /// <seealso cref="ISupportIncrementalLoading"/>
-    public class IncrementalLoadingCollection<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] TSource, TItemType> : ManagedCollection<TItemType>,
+    public class IncrementalLoadingCollection<TSource, TItemType> : ManagedCollection<TItemType>,
          ISupportIncrementalLoading
          where TSource : class, IIncrementalSource<TItemType>
     {

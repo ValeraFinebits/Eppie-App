@@ -101,7 +101,7 @@ namespace Tuvi.App.Shared.Views
 
 #if __ANDROID__ || __IOS__
         private bool _isEditingHtml = false;
-        private void OnEmailBodyTapped(object sender, TappedRoutedEventArgs e)
+        private async void OnEmailBodyTapped(object sender, TappedRoutedEventArgs e)
         {
 
             // ToDo:
