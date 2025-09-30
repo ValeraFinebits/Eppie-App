@@ -846,4 +846,12 @@ ________________________________________________________________________________
     <value>Перезапустите {0}, чтобы изменения вступили в силу.</value>
     <comment>This message appears after user select language. We need to restart {app name} for apply new language.</comment>
   </data>
+  <data name="FeatureNotImplementedErrorTitle" xml:space="preserve">
+    <value>Функция недоступна</value>
+    <comment>Title for error message when a feature is not implemented</comment>
+  </data>
+  <data name="FeatureNotImplementedErrorMessage" xml:space="preserve">
+    <value>Эта функция пока недоступна на вашей платформе. Она может быть добавлена в будущих обновлениях.</value>
+    <comment>Error message shown when a feature is not implemented</comment>
+  </data>
 </root>

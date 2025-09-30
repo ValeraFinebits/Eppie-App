@@ -854,4 +854,12 @@ Temat: {3}
     <value>Musisz zrestartować {0} aby zmiany odniosły efekt.</value>
     <comment>This message appears after user select language. We need to restart {app name} for apply new language.</comment>
   </data>
+  <data name="FeatureNotImplementedErrorTitle" xml:space="preserve">
+    <value>Funkcja niedostępna</value>
+    <comment>Title for error message when a feature is not implemented</comment>
+  </data>
+  <data name="FeatureNotImplementedErrorMessage" xml:space="preserve">
+    <value>Ta funkcja nie jest jeszcze dostępna na Twojej platformie. Może zostać dodana w przyszłych aktualizacjach.</value>
+    <comment>Error message shown when a feature is not implemented</comment>
+  </data>
 </root>
