@@ -970,4 +970,12 @@ Subject: {3}
     <value>None</value>
     <comment>Indicates the absence of a selection in a combobox.</comment>
   </data>
+  <data name="FeatureNotImplementedErrorTitle" xml:space="preserve">
+    <value>Функцыя недаступная</value>
+    <comment>Title for error message when a feature is not implemented</comment>
+  </data>
+  <data name="FeatureNotImplementedErrorMessage" xml:space="preserve">
+    <value>Гэтая функцыя пакуль недаступная на вашай платформе. Яна можа быць дададзена ў будучых абнаўленнях.</value>
+    <comment>Error message shown when a feature is not implemented</comment>
+  </data>
 </root>
