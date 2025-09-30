@@ -970,12 +970,4 @@ Betreft: {3}
     <value>None</value>
     <comment>Indicates the absence of a selection in a combobox.</comment>
   </data>
-  <data name="FeatureNotImplementedErrorTitle" xml:space="preserve">
-    <value>Functie niet beschikbaar</value>
-    <comment>Title for error message when a feature is not implemented</comment>
-  </data>
-  <data name="FeatureNotImplementedErrorMessage" xml:space="preserve">
-    <value>Deze functie is nog niet beschikbaar op uw platform. Het kan in toekomstige updates worden toegevoegd.</value>
-    <comment>Error message shown when a feature is not implemented</comment>
-  </data>
 </root>
