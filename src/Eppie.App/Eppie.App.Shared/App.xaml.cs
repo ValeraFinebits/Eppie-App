@@ -300,13 +300,19 @@ namespace Eppie.App.Shared
         {
             if (MainWindow?.Content is FrameworkElement rootElement)
             {
-                var theme = LocalSettingsService.Theme switch
+                ElementTheme theme;
+                if (LocalSettingsService.Theme == 1)
                 {
-                    0 => ElementTheme.Default,
-                    1 => ElementTheme.Light,
-                    2 => ElementTheme.Dark,
-                    _ => ElementTheme.Default
-                };
+                    theme = ElementTheme.Light;
+                }
+                else if (LocalSettingsService.Theme == 2)
+                {
+                    theme = ElementTheme.Dark;
+                }
+                else
+                {
+                    theme = ElementTheme.Default;
+                }
                 rootElement.RequestedTheme = theme;
             }
         }

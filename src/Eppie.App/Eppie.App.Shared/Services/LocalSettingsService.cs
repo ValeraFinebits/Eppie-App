@@ -25,12 +25,6 @@ using Tuvi.App.ViewModels;
 using Tuvi.App.ViewModels.Services;
 using Windows.Storage;
 
-#if WINDOWS_UWP
-using Windows.UI.Xaml;
-#else
-using Microsoft.UI.Xaml;
-#endif
-
 namespace Tuvi.App.Shared.Services
 {
     /// <summary>
