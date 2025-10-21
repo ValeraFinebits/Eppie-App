@@ -211,9 +211,6 @@ namespace Eppie.App.Shared
 
             ConfigurePreferredMinimumSize();
 
-            // Apply the saved theme
-            ApplyTheme();
-
             return frame;
         }
 
