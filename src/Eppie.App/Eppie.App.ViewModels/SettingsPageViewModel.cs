@@ -234,16 +234,33 @@ namespace Tuvi.App.ViewModels
         {
             if (LocalSettingsService != null)
             {
-                _themeSelectedIndex = LocalSettingsService.Theme;
+                _themeSelectedIndex = (int)LocalSettingsService.Theme;
                 OnPropertyChanged(nameof(ThemeSelectedIndex));
             }
         }
 
         private void ApplyTheme(int selectedIndex)
         {
-            if (LocalSettingsService != null && LocalSettingsService.Theme != selectedIndex)
+            if (LocalSettingsService != null)
             {
-                LocalSettingsService.Theme = selectedIndex;
+                AppTheme theme;
+                if (selectedIndex == 1)
+                {
+                    theme = AppTheme.Light;
+                }
+                else if (selectedIndex == 2)
+                {
+                    theme = AppTheme.Dark;
+                }
+                else
+                {
+                    theme = AppTheme.Default;
+                }
+
+                if (LocalSettingsService.Theme != theme)
+                {
+                    LocalSettingsService.Theme = theme;
+                }
             }
         }
 

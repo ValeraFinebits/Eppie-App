@@ -301,11 +301,11 @@ namespace Eppie.App.Shared
             if (MainWindow?.Content is FrameworkElement rootElement)
             {
                 ElementTheme theme;
-                if (LocalSettingsService.Theme == 1)
+                if (LocalSettingsService.Theme == AppTheme.Light)
                 {
                     theme = ElementTheme.Light;
                 }
-                else if (LocalSettingsService.Theme == 2)
+                else if (LocalSettingsService.Theme == AppTheme.Dark)
                 {
                     theme = ElementTheme.Dark;
                 }

@@ -54,17 +54,17 @@ namespace Tuvi.App.Shared.Services
         }
 
         /// <summary>
-        /// Property to store the UI theme (0 = Default, 1 = Light, 2 = Dark)
+        /// Property to store the UI theme
         /// </summary>
-        public int Theme
+        public AppTheme Theme
         {
             get
             {
-                return GetOption(0);
+                return GetEnumOption(AppTheme.Default);
             }
             set
             {
-                SetOption(value);
+                SetEnumOption(value);
             }
         }
 
