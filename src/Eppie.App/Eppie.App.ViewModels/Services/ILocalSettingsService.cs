@@ -30,6 +30,7 @@ namespace Tuvi.App.ViewModels.Services
         event EventHandler<SettingChangedEventArgs> SettingChanged;
 
         string Language { get; set; }
+        int Theme { get; set; }
         string SelectedMailFilterForAllMessagesPage { get; set; }
         string SelectedMailFilterForFolderMessagesPage { get; set; }
         string SelectedMailFilterForContactMessagesPage { get; set; }

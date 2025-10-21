@@ -107,6 +107,9 @@ namespace Eppie.App.Shared
         {
             LocalSettingsService = new LocalSettingsService();
             ApplicationLanguages.PrimaryLanguageOverride = LocalSettingsService.Language;
+            
+            // Subscribe to theme changes
+            LocalSettingsService.SettingChanged += LocalSettingsService_ThemeSettingChanged;
         }
 
         private void InitializeLogger()
@@ -206,6 +209,9 @@ namespace Eppie.App.Shared
 
             ConfigurePreferredMinimumSize();
 
+            // Apply the saved theme
+            ApplyTheme();
+
             return frame;
         }
 
@@ -280,6 +286,29 @@ namespace Eppie.App.Shared
                                    brand.GetAppVersion(),
                                    ApplicationLanguages.PrimaryLanguageOverride,
                                    RuntimeInformation.OSDescription);
+        }
+
+        private void LocalSettingsService_ThemeSettingChanged(object sender, SettingChangedEventArgs args)
+        {
+            if (args.Name == nameof(LocalSettingsService.Theme))
+            {
+                ApplyTheme();
+            }
+        }
+
+        private void ApplyTheme()
+        {
+            if (MainWindow?.Content is FrameworkElement rootElement)
+            {
+                var theme = LocalSettingsService.Theme switch
+                {
+                    0 => ElementTheme.Default,
+                    1 => ElementTheme.Light,
+                    2 => ElementTheme.Dark,
+                    _ => ElementTheme.Default
+                };
+                rootElement.RequestedTheme = theme;
+            }
         }
     }
 }
