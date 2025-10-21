@@ -91,10 +91,9 @@ namespace Eppie.App.Shared
                 LogLaunchInformation();
 
                 BuildHost();
-                
-                // Set initial theme before InitializeComponent
+
                 SetInitialTheme();
-                
+
                 InitializeComponent();
 
                 SubscribeToEvents();
@@ -111,8 +110,7 @@ namespace Eppie.App.Shared
         {
             LocalSettingsService = new LocalSettingsService();
             ApplicationLanguages.PrimaryLanguageOverride = LocalSettingsService.Language;
-            
-            // Subscribe to theme changes
+
             LocalSettingsService.SettingChanged += LocalSettingsService_ThemeSettingChanged;
         }
 
@@ -304,7 +302,6 @@ namespace Eppie.App.Shared
                     appTheme = ApplicationTheme.Dark;
                     break;
                 default:
-                    // Default means follow system theme, so we don't set RequestedTheme
                     return;
             }
             RequestedTheme = appTheme;
