@@ -243,6 +243,11 @@ namespace Tuvi.App.ViewModels
         {
             if (LocalSettingsService != null)
             {
+                if (selectedIndex < 0 || selectedIndex > 2)
+                {
+                    return;
+                }
+
                 AppTheme theme = (AppTheme)selectedIndex;
 
                 if (LocalSettingsService.Theme != theme)

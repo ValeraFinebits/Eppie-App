@@ -56,11 +56,11 @@ namespace Tuvi.App.Shared.Services
         /// <summary>
         /// Property to store the UI theme
         /// </summary>
-        public AppTheme Theme
+        public Tuvi.App.ViewModels.Services.AppTheme Theme
         {
             get
             {
-                return GetEnumOption(AppTheme.Default);
+                return GetEnumOption(Tuvi.App.ViewModels.Services.AppTheme.Default);
             }
             set
             {
