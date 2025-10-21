@@ -289,19 +289,17 @@ namespace Eppie.App.Shared
 
         private void SetInitialTheme()
         {
-            ApplicationTheme appTheme;
             switch (LocalSettingsService.Theme)
             {
                 case AppTheme.Light:
-                    appTheme = ApplicationTheme.Light;
+                    RequestedTheme = ApplicationTheme.Light;
                     break;
                 case AppTheme.Dark:
-                    appTheme = ApplicationTheme.Dark;
+                    RequestedTheme = ApplicationTheme.Dark;
                     break;
                 default:
                     return;
             }
-            RequestedTheme = appTheme;
         }
 
         private void LocalSettingsService_ThemeSettingChanged(object sender, SettingChangedEventArgs args)
