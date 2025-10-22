@@ -92,8 +92,6 @@ namespace Eppie.App.Shared
 
                 BuildHost();
 
-                SetInitialTheme();
-
                 InitializeComponent();
 
                 SubscribeToEvents();
@@ -209,6 +207,8 @@ namespace Eppie.App.Shared
             _errorHandler = new ErrorHandler();
             _errorHandler.SetMessageService(new MessageService(() => XamlRoot));
 
+            frame.RequestedTheme = ToElementTheme(LocalSettingsService.Theme);
+
             ConfigurePreferredMinimumSize();
 
             return frame;
@@ -287,21 +287,6 @@ namespace Eppie.App.Shared
                                    RuntimeInformation.OSDescription);
         }
 
-        private void SetInitialTheme()
-        {
-            switch (LocalSettingsService.Theme)
-            {
-                case AppTheme.Light:
-                    RequestedTheme = ApplicationTheme.Light;
-                    break;
-                case AppTheme.Dark:
-                    RequestedTheme = ApplicationTheme.Dark;
-                    break;
-                default:
-                    return;
-            }
-        }
-
         private void LocalSettingsService_ThemeSettingChanged(object sender, SettingChangedEventArgs args)
         {
             if (args.Name == nameof(LocalSettingsService.Theme))
@@ -314,20 +299,20 @@ namespace Eppie.App.Shared
         {
             if (MainWindow?.Content is FrameworkElement rootElement)
             {
-                ElementTheme theme;
-                switch (LocalSettingsService.Theme)
-                {
-                    case AppTheme.Light:
-                        theme = ElementTheme.Light;
-                        break;
-                    case AppTheme.Dark:
-                        theme = ElementTheme.Dark;
-                        break;
-                    default:
-                        theme = ElementTheme.Default;
-                        break;
-                }
-                rootElement.RequestedTheme = theme;
+                rootElement.RequestedTheme = ToElementTheme(LocalSettingsService.Theme);
+            }
+        }
+
+        private static ElementTheme ToElementTheme(Tuvi.App.ViewModels.Services.AppTheme theme)
+        {
+            switch (theme)
+            {
+                case Tuvi.App.ViewModels.Services.AppTheme.Light:
+                    return ElementTheme.Light;
+                case Tuvi.App.ViewModels.Services.AppTheme.Dark:
+                    return ElementTheme.Dark;
+                default:
+                    return ElementTheme.Default;
             }
         }
     }
