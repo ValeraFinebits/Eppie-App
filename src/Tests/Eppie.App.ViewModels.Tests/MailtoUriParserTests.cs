@@ -122,6 +122,7 @@ namespace Eppie.App.ViewModels.Tests
         }
 
         [Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA2234:Pass system uri objects instead of strings", Justification = "Testing string overload validation")]
         public void ParseWithNullStringThrowsArgumentException()
         {
             // Arrange, Act & Assert
@@ -129,6 +130,7 @@ namespace Eppie.App.ViewModels.Tests
         }
 
         [Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA2234:Pass system uri objects instead of strings", Justification = "Testing string overload validation")]
         public void ParseWithEmptyStringThrowsArgumentException()
         {
             // Arrange, Act & Assert
@@ -136,6 +138,7 @@ namespace Eppie.App.ViewModels.Tests
         }
 
         [Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA2234:Pass system uri objects instead of strings", Justification = "Testing string overload validation")]
         public void ParseWithWhitespaceStringThrowsArgumentException()
         {
             // Arrange, Act & Assert
@@ -143,6 +146,7 @@ namespace Eppie.App.ViewModels.Tests
         }
 
         [Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA2234:Pass system uri objects instead of strings", Justification = "Testing string overload validation")]
         public void ParseWithInvalidUriFormatThrowsArgumentException()
         {
             // Arrange, Act & Assert
