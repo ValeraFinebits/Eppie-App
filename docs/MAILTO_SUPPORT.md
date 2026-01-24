@@ -53,8 +53,8 @@ mailto:?subject=Feedback&body=Please%20share%20your%20thoughts
 ### iOS
 - Registered via `Info.plist` CFBundleURLSchemes
 - System automatically prompts user when first mailto link is clicked
-- Handled via Uno Platform's URL scheme activation (no custom AppDelegate required)
-- URL activation integrated through Uno's app lifecycle events
+- Launches Eppie when a `mailto:` link is tapped
+- Note: opening a pre-filled compose window from `mailto:` links currently requires additional iOS-specific activation handling and may not be fully supported yet
 
 ### Android
 - Registered via AndroidManifest.xml intent-filter
