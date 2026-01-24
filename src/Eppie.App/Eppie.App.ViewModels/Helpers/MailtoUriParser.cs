@@ -28,6 +28,16 @@ namespace Tuvi.App.ViewModels.Helpers
     public class MailtoUriParser
     {
         /// <summary>
+        /// The mailto URI scheme name.
+        /// </summary>
+        public const string MailtoScheme = "mailto";
+
+        /// <summary>
+        /// The mailto URI scheme prefix.
+        /// </summary>
+        public const string MailtoSchemePrefix = "mailto:";
+
+        /// <summary>
         /// Gets the primary recipient email address.
         /// </summary>
         public string To { get; private set; }
@@ -61,12 +71,12 @@ namespace Tuvi.App.ViewModels.Helpers
         /// <exception cref="ArgumentException">Thrown when URI is not a valid mailto: URI.</exception>
         public static MailtoUriParser Parse(Uri mailtoUri)
         {
-            if (mailtoUri == null)
+            if (mailtoUri is null)
             {
                 throw new ArgumentNullException(nameof(mailtoUri));
             }
 
-            if (!string.Equals(mailtoUri.Scheme, "mailto", StringComparison.OrdinalIgnoreCase))
+            if (!string.Equals(mailtoUri.Scheme, MailtoScheme, StringComparison.OrdinalIgnoreCase))
             {
                 throw new ArgumentException("URI must use the mailto: scheme.", nameof(mailtoUri));
             }

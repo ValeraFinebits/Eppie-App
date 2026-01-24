@@ -33,7 +33,7 @@ namespace Eppie.App
             {
                 // Look for mailto: URI in arguments
                 mailtoUri = args.FirstOrDefault(arg =>
-                    arg != null && arg.StartsWith("mailto:", StringComparison.OrdinalIgnoreCase));
+                    arg != null && arg.StartsWith(Tuvi.App.ViewModels.Helpers.MailtoUriParser.MailtoSchemePrefix, StringComparison.OrdinalIgnoreCase));
             }
 
             var host = UnoPlatformHostBuilder.Create()

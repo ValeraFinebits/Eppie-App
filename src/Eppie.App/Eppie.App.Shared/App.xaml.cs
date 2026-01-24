@@ -102,7 +102,7 @@ namespace Eppie.App
             _pendingMailtoUri = mailtoUri;
 
             // If app is already initialized, process immediately
-            if (NavigationService != null && Core != null)
+            if (NavigationService is not null && Core is not null)
             {
                 ProcessPendingMailtoUri();
             }
@@ -113,7 +113,7 @@ namespace Eppie.App
         /// </summary>
         private async void ProcessPendingMailtoUri()
         {
-            if (string.IsNullOrEmpty(_pendingMailtoUri) || NavigationService == null || Core == null)
+            if (string.IsNullOrEmpty(_pendingMailtoUri) || NavigationService is null || Core is null)
             {
                 return;
             }
@@ -127,7 +127,7 @@ namespace Eppie.App
                 var accounts = await Core.GetAccountsAsync().ConfigureAwait(true);
                 var defaultAccount = accounts.FirstOrDefault();
 
-                if (defaultAccount == null)
+                if (defaultAccount is null)
                 {
                     // No accounts configured, just ignore the mailto
                     return;

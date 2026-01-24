@@ -183,7 +183,7 @@ namespace Eppie.App
             {
                 ProtocolAuthenticationBroker.CompleteAuthentication(args.Uri);
             }
-            else if (string.Equals(args.Uri.Scheme, "mailto", StringComparison.OrdinalIgnoreCase))
+            else if (string.Equals(args.Uri.Scheme, Tuvi.App.ViewModels.Helpers.MailtoUriParser.MailtoScheme, StringComparison.OrdinalIgnoreCase))
             {
                 HandleMailtoActivation(args.Uri);
             }
@@ -196,8 +196,8 @@ namespace Eppie.App
                 // Get the default email account
                 var accounts = await Core.GetAccountsAsync().ConfigureAwait(true);
                 var defaultAccount = accounts.FirstOrDefault();
-                
-                if (defaultAccount == null)
+
+                if (defaultAccount is null)
                 {
                     // No accounts configured, just open the app normally
                     return;

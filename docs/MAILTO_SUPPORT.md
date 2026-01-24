@@ -53,7 +53,7 @@ mailto:?subject=Feedback&body=Please%20share%20your%20thoughts
 ### iOS
 - Registered via `Info.plist` CFBundleURLSchemes
 - System automatically prompts user when first mailto link is clicked
-- Handled via AppDelegate OpenUrl
+- Handled via Uno Platform's URL scheme activation
 
 ### Android
 - Registered via AndroidManifest.xml intent-filter

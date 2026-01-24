@@ -1,7 +1,4 @@
-﻿#pragma warning disable CA1707 // Remove underscores from test names - standard test naming convention
-#pragma warning disable CA2234 // String overload is valid for our use case
-
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using System;
 using Tuvi.App.ViewModels.Helpers;
 
@@ -11,10 +8,10 @@ namespace Tuvi.App.ViewModels.Tests
     public class MailtoUriParserTests
     {
         [Test]
-        public void Parse_SimpleMailtoWithRecipient_ParsesCorrectly()
+        public void ParseSimpleMailtoWithRecipientParsesCorrectly()
         {
             // Arrange
-            var mailtoUri = "mailto:user@example.com";
+            var mailtoUri = new Uri("mailto:user@example.com");
 
             // Act
             var result = MailtoUriParser.Parse(mailtoUri);
@@ -28,10 +25,10 @@ namespace Tuvi.App.ViewModels.Tests
         }
 
         [Test]
-        public void Parse_MailtoWithSubjectAndBody_ParsesCorrectly()
+        public void ParseMailtoWithSubjectAndBodyParsesCorrectly()
         {
             // Arrange
-            var mailtoUri = "mailto:user@example.com?subject=Hello&body=Test%20message";
+            var mailtoUri = new Uri("mailto:user@example.com?subject=Hello&body=Test%20message");
 
             // Act
             var result = MailtoUriParser.Parse(mailtoUri);
@@ -43,10 +40,10 @@ namespace Tuvi.App.ViewModels.Tests
         }
 
         [Test]
-        public void Parse_MailtoWithCcAndBcc_ParsesCorrectly()
+        public void ParseMailtoWithCcAndBccParsesCorrectly()
         {
             // Arrange
-            var mailtoUri = "mailto:user@example.com?cc=cc@example.com&bcc=bcc@example.com";
+            var mailtoUri = new Uri("mailto:user@example.com?cc=cc@example.com&bcc=bcc@example.com");
 
             // Act
             var result = MailtoUriParser.Parse(mailtoUri);
@@ -58,10 +55,10 @@ namespace Tuvi.App.ViewModels.Tests
         }
 
         [Test]
-        public void Parse_MailtoWithMultipleRecipients_ParsesCorrectly()
+        public void ParseMailtoWithMultipleRecipientsParsesCorrectly()
         {
             // Arrange
-            var mailtoUri = "mailto:user1@example.com?to=user2@example.com&cc=cc1@example.com,cc2@example.com";
+            var mailtoUri = new Uri("mailto:user1@example.com?to=user2@example.com&cc=cc1@example.com,cc2@example.com");
 
             // Act
             var result = MailtoUriParser.Parse(mailtoUri);
@@ -72,10 +69,10 @@ namespace Tuvi.App.ViewModels.Tests
         }
 
         [Test]
-        public void Parse_MailtoWithEncodedCharacters_DecodesCorrectly()
+        public void ParseMailtoWithEncodedCharactersDecodesCorrectly()
         {
             // Arrange
-            var mailtoUri = "mailto:user@example.com?subject=Test%20Subject%20%26%20More&body=Line1%0ALine2";
+            var mailtoUri = new Uri("mailto:user@example.com?subject=Test%20Subject%20%26%20More&body=Line1%0ALine2");
 
             // Act
             var result = MailtoUriParser.Parse(mailtoUri);
@@ -86,10 +83,10 @@ namespace Tuvi.App.ViewModels.Tests
         }
 
         [Test]
-        public void Parse_MailtoWithoutRecipient_ParsesCorrectly()
+        public void ParseMailtoWithoutRecipientParsesCorrectly()
         {
             // Arrange
-            var mailtoUri = "mailto:?subject=No%20Recipient&body=Body%20text";
+            var mailtoUri = new Uri("mailto:?subject=No%20Recipient&body=Body%20text");
 
             // Act
             var result = MailtoUriParser.Parse(mailtoUri);
@@ -101,10 +98,10 @@ namespace Tuvi.App.ViewModels.Tests
         }
 
         [Test]
-        public void Parse_MailtoWithAllFields_ParsesCorrectly()
+        public void ParseMailtoWithAllFieldsParsesCorrectly()
         {
             // Arrange
-            var mailtoUri = "mailto:primary@example.com?to=secondary@example.com&cc=cc@example.com&bcc=bcc@example.com&subject=Complete%20Test&body=Full%20message%20body";
+            var mailtoUri = new Uri("mailto:primary@example.com?to=secondary@example.com&cc=cc@example.com&bcc=bcc@example.com&subject=Complete%20Test&body=Full%20message%20body");
 
             // Act
             var result = MailtoUriParser.Parse(mailtoUri);
@@ -118,21 +115,21 @@ namespace Tuvi.App.ViewModels.Tests
         }
 
         [Test]
-        public void Parse_WithNullUri_ThrowsArgumentNullException()
+        public void ParseWithNullUriThrowsArgumentNullException()
         {
             // Arrange, Act & Assert
             Assert.Throws<ArgumentNullException>(() => MailtoUriParser.Parse((Uri)null!));
         }
 
         [Test]
-        public void Parse_WithNullString_ThrowsArgumentException()
+        public void ParseWithNullStringThrowsArgumentException()
         {
             // Arrange, Act & Assert
             Assert.Throws<ArgumentException>(() => MailtoUriParser.Parse((string)null!));
         }
 
         [Test]
-        public void Parse_WithInvalidScheme_ThrowsArgumentException()
+        public void ParseWithInvalidSchemeThrowsArgumentException()
         {
             // Arrange
             var httpUri = new Uri("http://example.com");
@@ -142,10 +139,10 @@ namespace Tuvi.App.ViewModels.Tests
         }
 
         [Test]
-        public void Parse_CaseInsensitiveScheme_ParsesCorrectly()
+        public void ParseCaseInsensitiveSchemeParsesCorrectly()
         {
             // Arrange
-            var mailtoUri = "MAILTO:user@example.com?SUBJECT=Test";
+            var mailtoUri = new Uri("MAILTO:user@example.com?SUBJECT=Test");
 
             // Act
             var result = MailtoUriParser.Parse(mailtoUri);
@@ -156,10 +153,10 @@ namespace Tuvi.App.ViewModels.Tests
         }
 
         [Test]
-        public void Parse_CaseInsensitiveParameters_ParsesCorrectly()
+        public void ParseCaseInsensitiveParametersParsesCorrectly()
         {
             // Arrange
-            var mailtoUri = "mailto:user@example.com?SUBJECT=Test&CC=cc@example.com&BCC=bcc@example.com&BODY=Message";
+            var mailtoUri = new Uri("mailto:user@example.com?SUBJECT=Test&CC=cc@example.com&BCC=bcc@example.com&BODY=Message");
 
             // Act
             var result = MailtoUriParser.Parse(mailtoUri);
@@ -172,10 +169,10 @@ namespace Tuvi.App.ViewModels.Tests
         }
 
         [Test]
-        public void Parse_EmptyMailto_ParsesCorrectly()
+        public void ParseEmptyMailtoParsesCorrectly()
         {
             // Arrange
-            var mailtoUri = "mailto:";
+            var mailtoUri = new Uri("mailto:");
 
             // Act
             var result = MailtoUriParser.Parse(mailtoUri);
