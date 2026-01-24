@@ -5,9 +5,9 @@ Eppie now supports the `mailto:` protocol, allowing users to compose emails dire
 ## Features
 
 - **Cross-Platform Support**: Works on Windows, macOS, Linux, iOS, and Android
-- **RFC 6068 Compliant**: Full support for mailto URI standard
+- **RFC 6068 Based**: Supports core mailto URI fields (to, cc, bcc, subject, body)
 - **Pre-filled Fields**: Automatically populates recipient, subject, body, CC, and BCC
-- **Default Mail Handler**: Can be set as the system's default email application
+- **Default Mail Handler**: Can be set as the system's default email application (Windows, macOS, Linux)
 
 ## Supported Mailto Formats
 
@@ -53,7 +53,8 @@ mailto:?subject=Feedback&body=Please%20share%20your%20thoughts
 ### iOS
 - Registered via `Info.plist` CFBundleURLSchemes
 - System automatically prompts user when first mailto link is clicked
-- Handled via Uno Platform's URL scheme activation
+- Handled via Uno Platform's URL scheme activation (no custom AppDelegate required)
+- URL activation integrated through Uno's app lifecycle events
 
 ### Android
 - Registered via AndroidManifest.xml intent-filter
