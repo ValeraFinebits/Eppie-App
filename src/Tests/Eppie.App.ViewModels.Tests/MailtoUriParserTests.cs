@@ -1,3 +1,6 @@
+#pragma warning disable CA1707 // Remove underscores from test names - standard test naming convention
+#pragma warning disable CA2234 // String overload is valid for our use case
+
 using NUnit.Framework;
 using System;
 using Tuvi.App.ViewModels.Helpers;
@@ -118,14 +121,14 @@ namespace Tuvi.App.ViewModels.Tests
         public void Parse_WithNullUri_ThrowsArgumentNullException()
         {
             // Arrange, Act & Assert
-            Assert.Throws<ArgumentNullException>(() => MailtoUriParser.Parse((Uri)null));
+            Assert.Throws<ArgumentNullException>(() => MailtoUriParser.Parse((Uri)null!));
         }
 
         [Test]
         public void Parse_WithNullString_ThrowsArgumentException()
         {
             // Arrange, Act & Assert
-            Assert.Throws<ArgumentException>(() => MailtoUriParser.Parse((string)null));
+            Assert.Throws<ArgumentException>(() => MailtoUriParser.Parse((string)null!));
         }
 
         [Test]

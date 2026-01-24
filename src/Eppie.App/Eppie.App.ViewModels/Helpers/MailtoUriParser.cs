@@ -103,17 +103,18 @@ namespace Tuvi.App.ViewModels.Helpers
             // Extract the primary recipient (the part after mailto: and before ?)
             var absoluteUri = mailtoUri.AbsoluteUri;
             var mailtoPrefix = "mailto:";
-            
+
             var startIndex = absoluteUri.IndexOf(mailtoPrefix, StringComparison.OrdinalIgnoreCase) + mailtoPrefix.Length;
-            var questionMarkIndex = absoluteUri.IndexOf('?');
-            
+            var questionMarkIndex = absoluteUri.IndexOf('?', startIndex);
+
             string primaryRecipient = string.Empty;
             if (questionMarkIndex > startIndex)
             {
                 primaryRecipient = absoluteUri.Substring(startIndex, questionMarkIndex - startIndex);
             }
-            else if (startIndex < absoluteUri.Length)
+            else if (questionMarkIndex == -1 && startIndex < absoluteUri.Length)
             {
+                // No query string, the rest is the recipient
                 primaryRecipient = absoluteUri.Substring(startIndex);
             }
 
@@ -142,7 +143,7 @@ namespace Tuvi.App.ViewModels.Helpers
             Body = queryParams.ContainsKey("body") ? queryParams["body"] : string.Empty;
         }
 
-        private Dictionary<string, string> ParseQueryString(string query)
+        private static Dictionary<string, string> ParseQueryString(string query)
         {
             var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
@@ -152,7 +153,7 @@ namespace Tuvi.App.ViewModels.Helpers
             }
 
             // Remove leading '?' if present
-            if (query.StartsWith("?"))
+            if (query.StartsWith("?", StringComparison.Ordinal))
             {
                 query = query.Substring(1);
             }
