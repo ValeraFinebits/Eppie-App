@@ -32,7 +32,7 @@ namespace Eppie.App
             if (args != null && args.Length > 0)
             {
                 // Look for mailto: URI in arguments
-                mailtoUri = args.FirstOrDefault(arg => 
+                mailtoUri = args.FirstOrDefault(arg =>
                     arg != null && arg.StartsWith("mailto:", StringComparison.OrdinalIgnoreCase));
             }
 
@@ -40,13 +40,13 @@ namespace Eppie.App
                 .App(() =>
                 {
                     var app = new Eppie.App.App();
-                    
+
                     // If we have a mailto URI, set it as pending
                     if (!string.IsNullOrEmpty(mailtoUri))
                     {
                         app.SetPendingMailtoUri(mailtoUri);
                     }
-                    
+
                     return app;
                 })
                 .UseX11()

@@ -194,7 +194,7 @@ namespace Eppie.App
             try
             {
                 // Get the default email account
-                var accounts = await Core.GetAccountsDataAsync().ConfigureAwait(true);
+                var accounts = await Core.GetAccountsAsync().ConfigureAwait(true);
                 var defaultAccount = accounts.FirstOrDefault();
                 
                 if (defaultAccount == null)

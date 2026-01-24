@@ -100,7 +100,7 @@ namespace Eppie.App
         public void SetPendingMailtoUri(string mailtoUri)
         {
             _pendingMailtoUri = mailtoUri;
-            
+
             // If app is already initialized, process immediately
             if (NavigationService != null && Core != null)
             {
@@ -124,7 +124,7 @@ namespace Eppie.App
                 _pendingMailtoUri = null;
 
                 // Get the default email account
-                var accounts = await Core.GetAccountsDataAsync().ConfigureAwait(true);
+                var accounts = await Core.GetAccountsAsync().ConfigureAwait(true);
                 var defaultAccount = accounts.FirstOrDefault();
 
                 if (defaultAccount == null)
