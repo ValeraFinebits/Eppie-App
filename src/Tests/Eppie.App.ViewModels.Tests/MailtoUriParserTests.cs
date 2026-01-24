@@ -1,4 +1,4 @@
-#pragma warning disable CA1707 // Remove underscores from test names - standard test naming convention
+﻿#pragma warning disable CA1707 // Remove underscores from test names - standard test naming convention
 #pragma warning disable CA2234 // String overload is valid for our use case
 
 using NUnit.Framework;
