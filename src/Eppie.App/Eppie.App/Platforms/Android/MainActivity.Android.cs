@@ -17,6 +17,7 @@
 // ---------------------------------------------------------------------------- //
 
 using Android.App;
+using Android.Content;
 using Android.OS;
 using Android.Views;
 
@@ -27,6 +28,14 @@ namespace Eppie.App.Droid
         ConfigurationChanges = global::Uno.UI.ActivityHelper.AllConfigChanges,
         WindowSoftInputMode = SoftInput.AdjustNothing | SoftInput.StateHidden
     )]
+    [IntentFilter(
+        new[] { Intent.ActionView },
+        Categories = new[] { Intent.CategoryDefault, Intent.CategoryBrowsable },
+        DataScheme = "mailto")]
+    [IntentFilter(
+        new[] { Intent.ActionView },
+        Categories = new[] { Intent.CategoryDefault, Intent.CategoryBrowsable },
+        DataScheme = "io.eppie")]
     public class MainActivity : Microsoft.UI.Xaml.ApplicationActivity
     {
         protected override void OnCreate(Bundle bundle)
@@ -34,6 +43,31 @@ namespace Eppie.App.Droid
             global::AndroidX.Core.SplashScreen.SplashScreen.InstallSplashScreen(this);
 
             base.OnCreate(bundle);
+
+            // Handle intent if app was launched via protocol
+            HandleIntent(Intent);
+        }
+
+        protected override void OnNewIntent(Intent intent)
+        {
+            base.OnNewIntent(intent);
+            HandleIntent(intent);
+        }
+
+        private void HandleIntent(Intent intent)
+        {
+            if (intent?.Data != null && intent.Action == Intent.ActionView)
+            {
+                var uri = intent.Data.ToString();
+                if (!string.IsNullOrEmpty(uri))
+                {
+                    // Get the app instance and set pending mailto URI
+                    if (Microsoft.UI.Xaml.Application.Current is App app)
+                    {
+                        app.SetPendingMailtoUri(uri);
+                    }
+                }
+            }
         }
     }
 }
