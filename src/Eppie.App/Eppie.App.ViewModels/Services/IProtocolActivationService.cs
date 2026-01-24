@@ -1,4 +1,4 @@
-﻿// ---------------------------------------------------------------------------- //
+// ---------------------------------------------------------------------------- //
 //                                                                              //
 //   Copyright 2026 Eppie (https://eppie.io)                                    //
 //                                                                              //
@@ -17,45 +17,24 @@
 // ---------------------------------------------------------------------------- //
 
 using System;
-using System.Linq;
-using Uno.UI.Hosting;
 
-namespace Eppie.App
+namespace Tuvi.App.ViewModels.Services
 {
-    public class Program
+    /// <summary>
+    /// Service for handling protocol activation (e.g., mailto: links).
+    /// </summary>
+    public interface IProtocolActivationService
     {
-        [STAThread]
-        public static void Main(string[] args)
-        {
-            // Check for mailto: protocol in arguments
-            string mailtoUri = null;
-            if (args != null && args.Length > 0)
-            {
-                // Look for mailto: URI in arguments
-                mailtoUri = args.FirstOrDefault(arg => 
-                    arg != null && arg.StartsWith("mailto:", StringComparison.OrdinalIgnoreCase));
-            }
+        /// <summary>
+        /// Handles activation via a protocol URI (e.g., mailto:user@example.com).
+        /// </summary>
+        /// <param name="uri">The activation URI.</param>
+        void HandleProtocolActivation(Uri uri);
 
-            var host = UnoPlatformHostBuilder.Create()
-                .App(() =>
-                {
-                    var app = new Eppie.App.App();
-                    
-                    // If we have a mailto URI, set it as pending
-                    if (!string.IsNullOrEmpty(mailtoUri))
-                    {
-                        app.SetPendingMailtoUri(mailtoUri);
-                    }
-                    
-                    return app;
-                })
-                .UseX11()
-                .UseLinuxFrameBuffer()
-                .UseMacOS()
-                .UseWin32()
-                .Build();
-
-            host.Run();
-        }
+        /// <summary>
+        /// Handles activation via a protocol URI string.
+        /// </summary>
+        /// <param name="uriString">The activation URI string.</param>
+        void HandleProtocolActivation(string uriString);
     }
 }
