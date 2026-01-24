@@ -42,7 +42,7 @@ namespace Eppie.App.iOS
                     return true;
                 }
             }
-            return false;
+            return base.OpenUrl(application, url, options);
         }
     }
 }
