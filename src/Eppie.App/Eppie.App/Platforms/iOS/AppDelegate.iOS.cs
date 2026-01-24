@@ -16,6 +16,7 @@
 //                                                                              //
 // ---------------------------------------------------------------------------- //
 
+using System;
 using Foundation;
 using UIKit;
 
@@ -28,12 +29,18 @@ namespace Eppie.App.iOS
         {
             if (url != null && !string.IsNullOrEmpty(url.AbsoluteString))
             {
-                // Get the app instance and set pending URL
-                if (Microsoft.UI.Xaml.Application.Current is App app)
+                var urlString = url.AbsoluteString;
+                
+                // Only handle mailto: URIs, ignore other schemes like io.eppie: (auth)
+                if (urlString.StartsWith("mailto:", StringComparison.OrdinalIgnoreCase))
                 {
-                    app.SetPendingMailtoUri(url.AbsoluteString);
+                    // Get the app instance and set pending mailto URI
+                    if (Microsoft.UI.Xaml.Application.Current is App app)
+                    {
+                        app.SetPendingMailtoUri(urlString);
+                    }
+                    return true;
                 }
-                return true;
             }
             return false;
         }
