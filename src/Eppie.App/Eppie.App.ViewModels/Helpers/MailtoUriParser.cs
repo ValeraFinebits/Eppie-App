@@ -19,7 +19,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 
 namespace Tuvi.App.ViewModels.Helpers
 {
@@ -145,11 +144,11 @@ namespace Tuvi.App.ViewModels.Helpers
 
         private static Dictionary<string, string> ParseQueryString(string query)
         {
-            var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            var tempResult = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
 
             if (string.IsNullOrWhiteSpace(query))
             {
-                return result;
+                return new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             }
 
             // Remove leading '?' if present
@@ -172,16 +171,20 @@ namespace Tuvi.App.ViewModels.Helpers
                     key = Uri.UnescapeDataString(key);
                     value = Uri.UnescapeDataString(value);
 
-                    // For duplicate keys, concatenate with comma (as per email standards)
-                    if (result.ContainsKey(key))
+                    // For duplicate keys, collect values in a list
+                    if (!tempResult.ContainsKey(key))
                     {
-                        result[key] = result[key] + ", " + value;
+                        tempResult[key] = new List<string>();
                     }
-                    else
-                    {
-                        result[key] = value;
-                    }
+                    tempResult[key].Add(value);
                 }
+            }
+
+            // Convert to final dictionary with comma-separated values
+            var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var kvp in tempResult)
+            {
+                result[kvp.Key] = string.Join(", ", kvp.Value);
             }
 
             return result;
