@@ -111,7 +111,7 @@ namespace Tuvi.App.ViewModels.Helpers
         {
             // Extract the primary recipient (the part after mailto: and before ?)
             var absoluteUri = mailtoUri.AbsoluteUri;
-            var mailtoPrefix = "mailto:";
+            var mailtoPrefix = MailtoSchemePrefix;
 
             var startIndex = absoluteUri.IndexOf(mailtoPrefix, StringComparison.OrdinalIgnoreCase) + mailtoPrefix.Length;
             var questionMarkIndex = absoluteUri.IndexOf('?', startIndex);

@@ -2,7 +2,7 @@
 using System;
 using Tuvi.App.ViewModels.Helpers;
 
-namespace Tuvi.App.ViewModels.Tests
+namespace Eppie.App.ViewModels.Tests
 {
     [TestFixture]
     public class MailtoUriParserTests
