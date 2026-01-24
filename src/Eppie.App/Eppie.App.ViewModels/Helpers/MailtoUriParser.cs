@@ -71,7 +71,7 @@ namespace Tuvi.App.ViewModels.Helpers
         /// <exception cref="ArgumentException">Thrown when URI is not a valid mailto: URI.</exception>
         public static MailtoUriParser Parse(Uri mailtoUri)
         {
-            if (mailtoUri is null)
+            if (mailtoUri == null)
             {
                 throw new ArgumentNullException(nameof(mailtoUri));
             }

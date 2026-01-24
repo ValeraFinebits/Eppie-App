@@ -197,7 +197,7 @@ namespace Eppie.App
                 var accounts = await Core.GetAccountsAsync().ConfigureAwait(true);
                 var defaultAccount = accounts.FirstOrDefault();
 
-                if (defaultAccount is null)
+                if (defaultAccount == null)
                 {
                     // No accounts configured, just open the app normally
                     return;

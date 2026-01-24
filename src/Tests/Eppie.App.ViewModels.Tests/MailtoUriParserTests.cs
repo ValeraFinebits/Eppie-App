@@ -122,10 +122,10 @@ namespace Eppie.App.ViewModels.Tests
         }
 
         [Test]
-        public void ParseWithNullStringThrowsArgumentException()
+        public void ParseWithNullUriThrowsArgumentException()
         {
             // Arrange, Act & Assert
-            Assert.Throws<ArgumentException>(() => MailtoUriParser.Parse((string)null!));
+            Assert.Throws<ArgumentException>(() => MailtoUriParser.Parse((Uri)null!));
         }
 
         [Test]
