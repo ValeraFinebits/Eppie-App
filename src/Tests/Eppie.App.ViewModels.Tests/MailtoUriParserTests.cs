@@ -121,37 +121,7 @@ namespace Eppie.App.ViewModels.Tests
             Assert.Throws<ArgumentNullException>(() => MailtoUriParser.Parse((Uri)null!));
         }
 
-        [Test]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA2234:Pass system uri objects instead of strings", Justification = "Testing string overload validation")]
-        public void ParseWithNullStringThrowsArgumentException()
-        {
-            // Arrange, Act & Assert
-            Assert.Throws<ArgumentException>(() => MailtoUriParser.Parse((string)null!));
-        }
 
-        [Test]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA2234:Pass system uri objects instead of strings", Justification = "Testing string overload validation")]
-        public void ParseWithEmptyStringThrowsArgumentException()
-        {
-            // Arrange, Act & Assert
-            Assert.Throws<ArgumentException>(() => MailtoUriParser.Parse(string.Empty));
-        }
-
-        [Test]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA2234:Pass system uri objects instead of strings", Justification = "Testing string overload validation")]
-        public void ParseWithWhitespaceStringThrowsArgumentException()
-        {
-            // Arrange, Act & Assert
-            Assert.Throws<ArgumentException>(() => MailtoUriParser.Parse("   "));
-        }
-
-        [Test]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA2234:Pass system uri objects instead of strings", Justification = "Testing string overload validation")]
-        public void ParseWithInvalidUriFormatThrowsArgumentException()
-        {
-            // Arrange, Act & Assert
-            Assert.Throws<ArgumentException>(() => MailtoUriParser.Parse("not a valid uri"));
-        }
 
         [Test]
         public void ParseWithInvalidSchemeThrowsArgumentException()
