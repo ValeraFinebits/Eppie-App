@@ -122,10 +122,31 @@ namespace Eppie.App.ViewModels.Tests
         }
 
         [Test]
-        public void ParseWithNullUriThrowsArgumentException()
+        public void ParseWithNullStringThrowsArgumentException()
         {
             // Arrange, Act & Assert
-            Assert.Throws<ArgumentException>(() => MailtoUriParser.Parse((Uri)null!));
+            Assert.Throws<ArgumentException>(() => MailtoUriParser.Parse((string)null!));
+        }
+
+        [Test]
+        public void ParseWithEmptyStringThrowsArgumentException()
+        {
+            // Arrange, Act & Assert
+            Assert.Throws<ArgumentException>(() => MailtoUriParser.Parse(string.Empty));
+        }
+
+        [Test]
+        public void ParseWithWhitespaceStringThrowsArgumentException()
+        {
+            // Arrange, Act & Assert
+            Assert.Throws<ArgumentException>(() => MailtoUriParser.Parse("   "));
+        }
+
+        [Test]
+        public void ParseWithInvalidUriFormatThrowsArgumentException()
+        {
+            // Arrange, Act & Assert
+            Assert.Throws<ArgumentException>(() => MailtoUriParser.Parse("not a valid uri"));
         }
 
         [Test]
