@@ -129,17 +129,17 @@ namespace Tuvi.App.ViewModels.Helpers
             {
                 toAddresses.Add(primaryRecipient);
             }
-            if (queryParams.ContainsKey("to"))
+            if (queryParams.TryGetValue("to", out var toParam))
             {
-                toAddresses.Add(queryParams["to"]);
+                toAddresses.Add(toParam);
             }
             To = string.Join(", ", toAddresses.Where(a => !string.IsNullOrWhiteSpace(a)));
 
             // Extract other fields
-            Cc = queryParams.ContainsKey("cc") ? queryParams["cc"] : string.Empty;
-            Bcc = queryParams.ContainsKey("bcc") ? queryParams["bcc"] : string.Empty;
-            Subject = queryParams.ContainsKey("subject") ? queryParams["subject"] : string.Empty;
-            Body = queryParams.ContainsKey("body") ? queryParams["body"] : string.Empty;
+            Cc = queryParams.TryGetValue("cc", out var cc) ? cc : string.Empty;
+            Bcc = queryParams.TryGetValue("bcc", out var bcc) ? bcc : string.Empty;
+            Subject = queryParams.TryGetValue("subject", out var subject) ? subject : string.Empty;
+            Body = queryParams.TryGetValue("body", out var body) ? body : string.Empty;
         }
 
         private static Dictionary<string, string> ParseQueryString(string query)

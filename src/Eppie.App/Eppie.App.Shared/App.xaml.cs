@@ -100,6 +100,12 @@ namespace Eppie.App
         public void SetPendingMailtoUri(string mailtoUri)
         {
             _pendingMailtoUri = mailtoUri;
+            
+            // If app is already initialized, process immediately
+            if (NavigationService != null && Core != null)
+            {
+                ProcessPendingMailtoUri();
+            }
         }
 
         /// <summary>

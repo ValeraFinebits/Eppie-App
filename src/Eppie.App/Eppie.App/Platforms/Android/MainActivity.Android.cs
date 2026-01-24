@@ -56,16 +56,13 @@ namespace Eppie.App.Droid
 
         private void HandleIntent(Intent intent)
         {
-            if (intent?.Data != null && intent.Action == Intent.ActionView)
+            var uri = intent?.Data?.ToString();
+            if (!string.IsNullOrEmpty(uri) && intent?.Action == Intent.ActionView)
             {
-                var uri = intent.Data.ToString();
-                if (!string.IsNullOrEmpty(uri))
+                // Get the app instance and set pending mailto URI
+                if (Microsoft.UI.Xaml.Application.Current is App app)
                 {
-                    // Get the app instance and set pending mailto URI
-                    if (Microsoft.UI.Xaml.Application.Current is App app)
-                    {
-                        app.SetPendingMailtoUri(uri);
-                    }
+                    app.SetPendingMailtoUri(uri);
                 }
             }
         }
