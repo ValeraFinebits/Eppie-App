@@ -213,4 +213,8 @@
     <value>Интервал проверки новых писем (в минутах)</value>
     <comment>The label of input field to enter check messages interval value in minutes</comment>
   </data>
+  <data name="ComposeEmailMenuItem.Text" xml:space="preserve">
+    <value>Написать письмо</value>
+    <comment>Text of the context menu item that opens compose window to send email to the contact</comment>
+  </data>
 </root>

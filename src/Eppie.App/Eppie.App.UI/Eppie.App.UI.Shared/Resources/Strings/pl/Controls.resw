@@ -455,4 +455,8 @@
     <value>Dołącz do listy oczekujących</value>
     <comment>JoinWaitingList button content</comment>
   </data>
+  <data name="ComposeEmailMenuItem.Text" xml:space="preserve">
+    <value>Utwórz email</value>
+    <comment>Text of the context menu item that opens compose window to send email to the contact</comment>
+  </data>
 </root>

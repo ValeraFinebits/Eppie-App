@@ -24,6 +24,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using Tuvi.App.ViewModels.Common;
 using Tuvi.App.ViewModels.Messages;
 using Tuvi.Core.Entities;
 
@@ -58,6 +59,7 @@ namespace Tuvi.App.ViewModels
         public ICommand ChangeContactAvatarCommand => new AsyncRelayCommand<ContactItem>(ChangeContactAvatarAsync);
         public ICommand RemoveContactCommand => new AsyncRelayCommand<ContactItem>(RemoveContactAsync);
         public ICommand InviteContactCommand => new AsyncRelayCommand<ContactItem>(InviteContactAsync);
+        public ICommand ComposeEmailCommand => new RelayCommand<ContactItem>(ComposeEmailToContact);
 
         private ContactItem _selectedContact;
         public ContactItem SelectedContact
@@ -165,6 +167,20 @@ namespace Tuvi.App.ViewModels
             }
 
             return MessageService.ShowInvitationDialogAsync(contactItem);
+        }
+
+        private void ComposeEmailToContact(ContactItem contactItem)
+        {
+            if (contactItem is null)
+            {
+                throw new ArgumentNullException(nameof(contactItem));
+            }
+
+            var messageData = new SelectedContactNewMessageData(
+                contactItem.LastMessageData.AccountEmail,
+                contactItem.Email);
+
+            NavigationService?.Navigate(nameof(NewMessagePageViewModel), messageData);
         }
 
         public void SetAvatarProvider(Func<Task<byte[]>> avatarProvider)
