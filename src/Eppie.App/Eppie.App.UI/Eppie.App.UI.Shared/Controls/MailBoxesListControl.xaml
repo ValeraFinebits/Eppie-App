@@ -30,29 +30,29 @@
                         <MenuFlyout>
                             <!--  Mailbox menu items (shown when IsRootItem = true)  -->
                             <MenuFlyoutItem x:Uid="/Eppie.App.UI/Controls/NewFolderMenuItem"
-                                          Click="NewFolderMenuItemClick"
-                                          Tag="{x:Bind}"
-                                          Visibility="{x:Bind IsRootItem, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                            Click="NewFolderMenuItemClick"
+                                            Tag="{x:Bind}"
+                                            Visibility="{x:Bind IsRootItem, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
                             <MenuFlyoutItem x:Uid="/Eppie.App.UI/Controls/MailboxSettingsMenuItem"
-                                          Click="MailboxSettingsMenuItemClick"
-                                          Tag="{x:Bind}"
-                                          Visibility="{x:Bind IsRootItem, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                            Click="MailboxSettingsMenuItemClick"
+                                            Tag="{x:Bind}"
+                                            Visibility="{x:Bind IsRootItem, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
                             <MenuFlyoutSeparator Visibility="{x:Bind IsRootItem, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
                             <MenuFlyoutItem x:Uid="/Eppie.App.UI/Controls/RemoveMailboxMenuItem"
-                                          Click="RemoveMailboxMenuItemClick"
-                                          Tag="{x:Bind}"
-                                          Visibility="{x:Bind IsRootItem, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                            Click="RemoveMailboxMenuItemClick"
+                                            Tag="{x:Bind}"
+                                            Visibility="{x:Bind IsRootItem, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
 
                             <!--  Folder menu items (shown when IsRootItem = false)  -->
                             <MenuFlyoutItem x:Uid="/Eppie.App.UI/Controls/RenameFolderMenuItem"
-                                          Click="RenameFolderMenuItemClick"
-                                          Tag="{x:Bind}"
-                                          Visibility="{x:Bind IsRootItem, Mode=OneWay, Converter={StaticResource InverseBoolToVisibilityConverter}}" />
+                                            Click="RenameFolderMenuItemClick"
+                                            Tag="{x:Bind}"
+                                            Visibility="{x:Bind IsRootItem, Mode=OneWay, Converter={StaticResource InverseBoolToVisibilityConverter}}" />
                             <MenuFlyoutSeparator Visibility="{x:Bind IsRootItem, Mode=OneWay, Converter={StaticResource InverseBoolToVisibilityConverter}}" />
                             <MenuFlyoutItem x:Uid="/Eppie.App.UI/Controls/DeleteFolderMenuItem"
-                                          Click="DeleteFolderMenuItemClick"
-                                          Tag="{x:Bind}"
-                                          Visibility="{x:Bind IsRootItem, Mode=OneWay, Converter={StaticResource InverseBoolToVisibilityConverter}}" />
+                                            Click="DeleteFolderMenuItemClick"
+                                            Tag="{x:Bind}"
+                                            Visibility="{x:Bind IsRootItem, Mode=OneWay, Converter={StaticResource InverseBoolToVisibilityConverter}}" />
                         </MenuFlyout>
                     </Grid.ContextFlyout>
 

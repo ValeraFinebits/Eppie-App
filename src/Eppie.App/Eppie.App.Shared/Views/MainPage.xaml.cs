@@ -26,6 +26,7 @@ using Eppie.App.UI.Extensions;
 using Tuvi.App.ViewModels;
 using Tuvi.App.ViewModels.Messages;
 using Tuvi.App.ViewModels.Services;
+using Eppie.App.UI.Common;
 
 #if WINDOWS_UWP
 using Windows.UI.Xaml;
@@ -311,7 +312,7 @@ namespace Eppie.App.Views
             var stringProvider = Eppie.App.UI.Resources.StringProvider.GetInstance();
             // Note: Reusing ShowRenameContactDialogAsync for generic text input
             // Consider creating ShowTextInputDialogAsync for better clarity
-            await Common.UITools.ShowRenameContactDialogAsync(
+            await UITools.ShowRenameContactDialogAsync(
                 stringProvider.GetString("NewFolderDialogTitle"),
                 stringProvider.GetString("NewFolderDialogPrimaryButtonText"),
                 stringProvider.GetString("NewFolderDialogCloseButtonText"),
@@ -347,10 +348,10 @@ namespace Eppie.App.Views
 
             try
             {
-                var account = await ViewModel.Core.GetAccountAsync(mailBoxItem.Email).ConfigureAwait(true);
+                var account = await ViewModel.GetAccountAsync(mailBoxItem.Email).ConfigureAwait(true);
                 if (account != null)
                 {
-                    ViewModel.NavigateToMailboxSettingsPage(account, isReloginNeeded: false);
+                    ViewModel.OpenMailboxSettings(account);
                 }
             }
             catch (Exception ex)
@@ -368,10 +369,10 @@ namespace Eppie.App.Views
 
             try
             {
-                var account = await ViewModel.Core.GetAccountAsync(mailBoxItem.Email).ConfigureAwait(true);
+                var account = await ViewModel.GetAccountAsync(mailBoxItem.Email).ConfigureAwait(true);
                 if (account != null)
                 {
-                    await ViewModel.Core.DeleteAccountAsync(account).ConfigureAwait(true);
+                    await ViewModel.RemoveAccountAsync(account).ConfigureAwait(true);
                     // Refresh the mailbox list will happen automatically via events
                 }
             }
@@ -391,7 +392,7 @@ namespace Eppie.App.Views
             var stringProvider = Eppie.App.UI.Resources.StringProvider.GetInstance();
             // Note: Reusing ShowRenameContactDialogAsync for generic text input
             // Consider creating ShowTextInputDialogAsync for better clarity
-            await Common.UITools.ShowRenameContactDialogAsync(
+            await UITools.ShowRenameContactDialogAsync(
                 stringProvider.GetString("RenameFolderDialogTitle"),
                 stringProvider.GetString("RenameFolderDialogPrimaryButtonText"),
                 stringProvider.GetString("RenameFolderDialogCloseButtonText"),
