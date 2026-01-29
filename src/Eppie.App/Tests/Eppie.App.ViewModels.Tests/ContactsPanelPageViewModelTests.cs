@@ -17,6 +17,7 @@
 // ---------------------------------------------------------------------------- //
 
 using System.Diagnostics;
+using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Eppie.App.ViewModels.Tests.TestDoubles;
@@ -674,7 +675,7 @@ namespace Eppie.App.ViewModels.Tests
         public async Task ComposeEmailCommandWithNullLastMessageDataUsesFirstAvailableAccount()
         {
             var contact = CreateContact("user@site.com", "Test User");
-            var (vm, _, core, _, _) = CreateVm(new[] { contact });
+            var (vm, _, _, _, _) = CreateVm(new[] { contact });
             using (vm)
             {
                 var navService = new TestNavigationService();
@@ -693,6 +694,30 @@ namespace Eppie.App.ViewModels.Tests
                 // Should use the first available account (which is seeded in CreateVm)
                 Assert.That(messageData.From, Is.Not.Null);
                 Assert.That(messageData.To, Is.EqualTo("test@example.com"));
+            }
+        }
+
+        [Test]
+        public async Task ComposeEmailCommandWithNoAccountsShowsAddAccountMessage()
+        {
+            var contact = CreateContact("user@site.com", "Test User");
+            var (vm, _, _, _, _) = CreateVm(new[] { contact }, seedAccounts: Array.Empty<EmailAddress>());
+            using (vm)
+            {
+                var navService = new TestNavigationService();
+                vm.SetNavigationService(navService);
+
+                var messageService = new TestMessageService();
+                vm.SetMessageService(messageService);
+
+                // Create a ContactItem using the EmailAddress constructor
+                var contactItem = new ContactItem(new EmailAddress("test@example.com", "Test Contact"));
+
+                await ((AsyncRelayCommand<ContactItem>)vm.ComposeEmailCommand).ExecuteAsync(contactItem).ConfigureAwait(false);
+
+                // Should not navigate when no accounts are available
+                Assert.That(navService.LastNavigatedPage, Is.Null);
+                Assert.That(messageService.ShowAddAccountMessageCalled, Is.True);
             }
         }
 
@@ -748,6 +773,39 @@ namespace Eppie.App.ViewModels.Tests
             {
                 throw new NotImplementedException();
             }
+        }
+
+        private sealed class TestMessageService : Tuvi.App.ViewModels.Services.ITuviMailMessageService
+        {
+            public bool ShowAddAccountMessageCalled { get; private set; }
+
+            public Task ShowAddAccountMessageAsync()
+            {
+                ShowAddAccountMessageCalled = true;
+                return Task.CompletedTask;
+            }
+
+            public Task ShowErrorMessageAsync(Exception exception)
+            {
+                return Task.CompletedTask;
+            }
+
+            // Implement other required methods with NotImplementedException
+            public Task ShowEnableImapMessageAsync(string forEmail) => throw new NotImplementedException();
+            public Task ShowSeedPhraseNotValidMessageAsync() => throw new NotImplementedException();
+            public Task ShowPgpPublicKeyAlreadyExistMessageAsync(string fileName) => throw new NotImplementedException();
+            public Task ShowPgpUnknownPublicKeyAlgorithmMessageAsync(string fileName) => throw new NotImplementedException();
+            public Task ShowPgpPublicKeyImportErrorMessageAsync(string detailedReason, string fileName) => throw new NotImplementedException();
+            public Task<bool> ShowWipeAllDataDialogAsync() => throw new NotImplementedException();
+            public Task<bool> ShowRemoveAccountDialogAsync() => throw new NotImplementedException();
+            public Task<bool> ShowRemoveAIAgentDialogAsync() => throw new NotImplementedException();
+            public Task<bool> ShowRemovePgpKeyDialogAsync() => throw new NotImplementedException();
+            public Task<bool> ShowRequestReviewMessageAsync() => throw new NotImplementedException();
+            public Task ShowNeedToCreateSeedPhraseMessageAsync() => throw new NotImplementedException();
+            public Task ShowWhatsNewDialogAsync(string version, bool isStorePaymentProcessor, bool isSupportDevelopmentButtonVisible, string price, ICommand supportDevelopmentCommand, string twitterUrl) => throw new NotImplementedException();
+            public Task ShowSupportDevelopmentDialogAsync(bool isStorePaymentProcessor, string price, ICommand supportDevelopmentCommand) => throw new NotImplementedException();
+            public Task ShowProtonConnectAddressDialogAsync(object? data = null) => throw new NotImplementedException();
+            public Task ShowInvitationDialogAsync(object? invitationData = null) => throw new NotImplementedException();
         }
 
         private sealed class ThrowingDispatcherService : Tuvi.App.ViewModels.Services.IDispatcherService

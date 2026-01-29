@@ -126,15 +126,17 @@ namespace Eppie.App.ViewModels.Tests.TestDoubles
                     new[] { typeof(IReadOnlyList<CompositeFolder>), typeof(IEnumerable<EmailAddress>), typeof(CompositeFolder) },
                     null);
 
-                if (constructor != null)
+                if (constructor == null)
                 {
-                    var account = (CompositeAccount)constructor.Invoke(new object?[] {
-                        Array.Empty<CompositeFolder>(),
-                        new[] { email },
-                        null
-                    });
-                    accounts.Add(account);
+                    throw new InvalidOperationException("CompositeAccount internal constructor not found. The internal API may have changed.");
                 }
+
+                var account = (CompositeAccount)constructor.Invoke(new object?[] {
+                    Array.Empty<CompositeFolder>(),
+                    new[] { email },
+                    null
+                });
+                accounts.Add(account);
             }
             return Task.FromResult<IReadOnlyList<CompositeAccount>>(accounts);
         }
