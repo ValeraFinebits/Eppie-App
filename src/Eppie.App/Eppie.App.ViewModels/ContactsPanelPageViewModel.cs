@@ -59,7 +59,7 @@ namespace Tuvi.App.ViewModels
         public ICommand ChangeContactAvatarCommand => new AsyncRelayCommand<ContactItem>(ChangeContactAvatarAsync);
         public ICommand RemoveContactCommand => new AsyncRelayCommand<ContactItem>(RemoveContactAsync);
         public ICommand InviteContactCommand => new AsyncRelayCommand<ContactItem>(InviteContactAsync);
-        public ICommand ComposeEmailCommand => new RelayCommand<ContactItem>(ComposeEmailToContact);
+        public ICommand ComposeEmailCommand => new AsyncRelayCommand<ContactItem>(ComposeEmailToContactAsync);
 
         private ContactItem _selectedContact;
         public ContactItem SelectedContact
@@ -169,18 +169,42 @@ namespace Tuvi.App.ViewModels
             return MessageService.ShowInvitationDialogAsync(contactItem);
         }
 
-        private void ComposeEmailToContact(ContactItem contactItem)
+        private async Task ComposeEmailToContactAsync(ContactItem contactItem)
         {
             if (contactItem is null)
             {
                 throw new ArgumentNullException(nameof(contactItem));
             }
 
-            var messageData = new SelectedContactNewMessageData(
-                contactItem.LastMessageData.AccountEmail,
-                contactItem.Email);
+            try
+            {
+                EmailAddress fromEmail = null;
 
-            NavigationService?.Navigate(nameof(NewMessagePageViewModel), messageData);
+                // Try to get the account email from LastMessageData
+                if (contactItem.LastMessageData?.AccountEmail != null)
+                {
+                    fromEmail = contactItem.LastMessageData.AccountEmail;
+                }
+                else
+                {
+                    // If LastMessageData or AccountEmail is null, use the first available account
+                    var accounts = await Core.GetCompositeAccountsAsync().ConfigureAwait(true);
+                    if (accounts.Count > 0)
+                    {
+                        fromEmail = accounts[0].Email;
+                    }
+                }
+
+                if (fromEmail != null)
+                {
+                    var messageData = new SelectedContactNewMessageData(fromEmail, contactItem.Email);
+                    NavigationService?.Navigate(nameof(NewMessagePageViewModel), messageData);
+                }
+            }
+            catch (Exception ex)
+            {
+                OnError(ex);
+            }
         }
 
         public void SetAvatarProvider(Func<Task<byte[]>> avatarProvider)

@@ -455,8 +455,4 @@
     <value>待機リストに参加する</value>
     <comment>JoinWaitingList button content</comment>
   </data>
-  <data name="ComposeEmailMenuItem.Text" xml:space="preserve">
-    <value>メールを作成</value>
-    <comment>Text of the context menu item that opens compose window to send email to the contact</comment>
-  </data>
 </root>

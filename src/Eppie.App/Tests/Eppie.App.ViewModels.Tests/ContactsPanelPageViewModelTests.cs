@@ -75,11 +75,13 @@ namespace Eppie.App.ViewModels.Tests
 
         private static (ContactsPanelPageViewModel Vm, TestManagedCollection<ContactItem> Collection, FakeTuviMail Core, TestLocalSettingsService Settings, RecorderErrorHandler Errors) CreateVm(
             IEnumerable<Contact>? seedContacts = null,
-            IReadOnlyDictionary<EmailAddress, int>? unreadCounts = null)
+            IReadOnlyDictionary<EmailAddress, int>? unreadCounts = null,
+            IEnumerable<EmailAddress>? seedAccounts = null)
         {
             var core = new FakeTuviMail();
             core.SeedContacts(seedContacts ?? Array.Empty<Contact>());
             core.SetUnreadCounts(unreadCounts ?? new Dictionary<EmailAddress, int>());
+            core.SeedAccountEmails(seedAccounts ?? new[] { new EmailAddress("default@local", "Default Account") });
 
             var vm = new ContactsPanelPageViewModel();
             var settings = new TestLocalSettingsService();
@@ -641,12 +643,12 @@ namespace Eppie.App.ViewModels.Tests
             var (vm, _, _, _, _) = CreateVm();
             using (vm)
             {
-                Assert.That(() => vm.ComposeEmailCommand.Execute(null), Throws.InstanceOf<ArgumentNullException>());
+                Assert.That(async () => await ((AsyncRelayCommand<ContactItem>)vm.ComposeEmailCommand).ExecuteAsync(null).ConfigureAwait(false), Throws.InstanceOf<ArgumentNullException>());
             }
         }
 
         [Test]
-        public void ComposeEmailCommandNavigatesToNewMessagePageWithCorrectData()
+        public async Task ComposeEmailCommandNavigatesToNewMessagePageWithCorrectData()
         {
             var contact = CreateContact("user@site.com", "Test User");
             var (vm, _, _, _, _) = CreateVm(new[] { contact });
@@ -656,7 +658,7 @@ namespace Eppie.App.ViewModels.Tests
                 vm.SetNavigationService(navService);
 
                 var contactItem = new ContactItem(contact);
-                vm.ComposeEmailCommand.Execute(contactItem);
+                await ((AsyncRelayCommand<ContactItem>)vm.ComposeEmailCommand).ExecuteAsync(contactItem).ConfigureAwait(false);
 
                 Assert.That(navService.LastNavigatedPage, Is.EqualTo(nameof(NewMessagePageViewModel)));
                 Assert.That(navService.LastNavigationData, Is.Not.Null);
@@ -665,6 +667,32 @@ namespace Eppie.App.ViewModels.Tests
                 var messageData = (SelectedContactNewMessageData)navService.LastNavigationData!;
                 Assert.That(messageData.From.Address, Is.EqualTo("acc@local"));
                 Assert.That(messageData.To, Is.EqualTo("user@site.com"));
+            }
+        }
+
+        [Test]
+        public async Task ComposeEmailCommandWithNullLastMessageDataUsesFirstAvailableAccount()
+        {
+            var contact = CreateContact("user@site.com", "Test User");
+            var (vm, _, core, _, _) = CreateVm(new[] { contact });
+            using (vm)
+            {
+                var navService = new TestNavigationService();
+                vm.SetNavigationService(navService);
+
+                // Create a ContactItem using the EmailAddress constructor, which doesn't set LastMessageData
+                var contactItem = new ContactItem(new EmailAddress("test@example.com", "Test Contact"));
+
+                await ((AsyncRelayCommand<ContactItem>)vm.ComposeEmailCommand).ExecuteAsync(contactItem).ConfigureAwait(false);
+
+                Assert.That(navService.LastNavigatedPage, Is.EqualTo(nameof(NewMessagePageViewModel)));
+                Assert.That(navService.LastNavigationData, Is.Not.Null);
+                Assert.That(navService.LastNavigationData, Is.TypeOf<SelectedContactNewMessageData>());
+
+                var messageData = (SelectedContactNewMessageData)navService.LastNavigationData!;
+                // Should use the first available account (which is seeded in CreateVm)
+                Assert.That(messageData.From, Is.Not.Null);
+                Assert.That(messageData.To, Is.EqualTo("test@example.com"));
             }
         }
 
