@@ -188,10 +188,41 @@ jobs:
           msbuild -target:Build -property:Configuration=$configuration $framework_option $extra_options $project
 
       - name: Run tests via dotnet (${{ env.EPPIE_BUILD_CONFIGURATION }})
-        if: runner.os == 'Windows' && !contains(matrix.build.project, 'UWP')
+        if: matrix.test.tool == 'dotnet' && matrix.test.projects
+        shell: bash
+        run: |
+          configuration='${{ env.EPPIE_BUILD_CONFIGURATION }}'
+          extra_options='${{ matrix.test.extra }}'
+          
+          # Override configuration if test config specifies one
+          test_configuration='${{ matrix.test.configuration }}'
+          if [ ! -z "$test_configuration" ]; then
+            configuration="$test_configuration"
+          fi
+          
+          # Run tests for each project
+          IFS=',' read -ra projects <<< "${{ join(matrix.test.projects, ',') }}"
+          for project in "${projects[@]}"; do
+            echo "Running tests for: $project"
+            dotnet test --configuration=$configuration $extra_options "$project"
+          done
+
+      - name: Run tests via msbuild (${{ env.EPPIE_BUILD_CONFIGURATION }})
+        if: matrix.test.tool == 'msbuild' && matrix.test.projects && runner.os == 'Windows'
         shell: pwsh
         run: |
           $configuration='${{ env.EPPIE_BUILD_CONFIGURATION }}'
-
-          dotnet test --configuration $configuration --nologo --verbosity minimal src/Eppie.App/Tests/Eppie.App.ViewModels.Tests/Eppie.App.ViewModels.Tests.csproj
-          dotnet test --configuration $configuration --nologo --verbosity minimal src/Eppie.App/Tests/Eppie.App.UI.Tests/Eppie.App.UI.Tests.csproj
+          $extra_options=$('${{ matrix.test.extra }}' -split '\s+')
+          
+          # Override configuration if test config specifies one
+          $test_configuration='${{ matrix.test.configuration }}'
+          if ($test_configuration) {
+            $configuration=$test_configuration
+          }
+          
+          # Run tests for each project
+          $projects = '${{ join(matrix.test.projects, ',') }}' -split ','
+          foreach ($project in $projects) {
+            Write-Host "Running tests for: $project"
+            msbuild -target:Test -property:Configuration=$configuration $extra_options $project
+          }
