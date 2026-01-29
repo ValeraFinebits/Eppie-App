@@ -301,36 +301,129 @@ namespace Eppie.App.Views
             contentFrame.Navigate(typeof(ContactMessagesPage), new ContactMessagesPageViewModel.NavigationData() { ContactItem = message.Value, ErrorHandler = this });
         }
 
-        private void NewFolder(MailBoxItem mailBoxItem)
+        private async void NewFolder(MailBoxItem mailBoxItem)
         {
-            // TODO: Implement new folder creation
-            // This should show a dialog to enter folder name and create the folder
+            if (mailBoxItem == null || !mailBoxItem.IsRootItem)
+            {
+                return;
+            }
+
+            var stringProvider = Eppie.App.UI.Resources.StringProvider.GetInstance();
+            await Common.UITools.ShowRenameContactDialogAsync(
+                stringProvider.GetString("NewFolderDialogTitle"),
+                stringProvider.GetString("NewFolderDialogPrimaryButtonText"),
+                stringProvider.GetString("NewFolderDialogCloseButtonText"),
+                stringProvider.GetString("NewFolderDialogTextBoxHeader"),
+                string.Empty,
+                this.XamlRoot,
+                async (folderName) =>
+                {
+                    if (!string.IsNullOrWhiteSpace(folderName))
+                    {
+                        try
+                        {
+                            // TODO: Call Core API to create folder
+                            // await ViewModel.Core.CreateFolderAsync(mailBoxItem.Email, folderName).ConfigureAwait(true);
+                        }
+                        catch (Exception ex)
+                        {
+                            OnError(ex);
+                        }
+                    }
+                });
         }
 
-        private void OpenMailboxSettings(MailBoxItem mailBoxItem)
+        private async void OpenMailboxSettings(MailBoxItem mailBoxItem)
         {
-            // TODO: Implement opening mailbox settings
-            // This should navigate to the account settings page for the selected mailbox
+            if (mailBoxItem == null || !mailBoxItem.IsRootItem)
+            {
+                return;
+            }
+
+            try
+            {
+                var account = await ViewModel.Core.GetAccountAsync(mailBoxItem.Email).ConfigureAwait(true);
+                if (account != null)
+                {
+                    ViewModel.NavigateToMailboxSettingsPage(account, isReloginNeeded: false);
+                }
+            }
+            catch (Exception ex)
+            {
+                OnError(ex);
+            }
         }
 
-        private void RemoveMailbox(MailBoxItem mailBoxItem)
+        private async void RemoveMailbox(MailBoxItem mailBoxItem)
         {
-            // TODO: Implement mailbox removal
-            // This should remove the account from the application
-            // Note: Confirmation dialog is already handled in MailBoxesListControl
+            if (mailBoxItem == null || !mailBoxItem.IsRootItem)
+            {
+                return;
+            }
+
+            try
+            {
+                var account = await ViewModel.Core.GetAccountAsync(mailBoxItem.Email).ConfigureAwait(true);
+                if (account != null)
+                {
+                    await ViewModel.Core.DeleteAccountAsync(account).ConfigureAwait(true);
+                    // Refresh the mailbox list will happen automatically via events
+                }
+            }
+            catch (Exception ex)
+            {
+                OnError(ex);
+            }
         }
 
-        private void RenameFolder(MailBoxItem mailBoxItem)
+        private async void RenameFolder(MailBoxItem mailBoxItem)
         {
-            // TODO: Implement folder renaming
-            // This should show a dialog to enter new folder name and rename the folder
+            if (mailBoxItem == null || mailBoxItem.IsRootItem || mailBoxItem.Folder == null)
+            {
+                return;
+            }
+
+            var stringProvider = Eppie.App.UI.Resources.StringProvider.GetInstance();
+            await Common.UITools.ShowRenameContactDialogAsync(
+                stringProvider.GetString("RenameFolderDialogTitle"),
+                stringProvider.GetString("RenameFolderDialogPrimaryButtonText"),
+                stringProvider.GetString("RenameFolderDialogCloseButtonText"),
+                stringProvider.GetString("RenameFolderDialogTextBoxHeader"),
+                mailBoxItem.Text,
+                this.XamlRoot,
+                async (newFolderName) =>
+                {
+                    if (!string.IsNullOrWhiteSpace(newFolderName) && newFolderName != mailBoxItem.Text)
+                    {
+                        try
+                        {
+                            // TODO: Call Core API to rename folder
+                            // await ViewModel.Core.RenameFolderAsync(mailBoxItem.Folder, newFolderName).ConfigureAwait(true);
+                        }
+                        catch (Exception ex)
+                        {
+                            OnError(ex);
+                        }
+                    }
+                });
         }
 
-        private void DeleteFolder(MailBoxItem mailBoxItem)
+        private async void DeleteFolder(MailBoxItem mailBoxItem)
         {
-            // TODO: Implement folder deletion
-            // This should delete the folder from the mailbox
-            // Note: Confirmation dialog is already handled in MailBoxesListControl
+            if (mailBoxItem == null || mailBoxItem.IsRootItem || mailBoxItem.Folder == null)
+            {
+                return;
+            }
+
+            try
+            {
+                // TODO: Call Core API to delete folder
+                // await ViewModel.Core.DeleteFolderAsync(mailBoxItem.Folder).ConfigureAwait(true);
+            }
+            catch (Exception ex)
+            {
+                OnError(ex);
+            }
         }
 
         public override void HandleBack()

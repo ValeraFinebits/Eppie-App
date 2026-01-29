@@ -1660,4 +1660,36 @@ Eppie
     <value>Cancel</value>
     <comment>The reject button text for the delete folder dialog</comment>
   </data>
+  <data name="NewFolderDialogTitle" xml:space="preserve">
+    <value>New Folder</value>
+    <comment>The title of the dialog for creating a new folder</comment>
+  </data>
+  <data name="NewFolderDialogPrimaryButtonText" xml:space="preserve">
+    <value>Create</value>
+    <comment>The primary button text for the new folder dialog</comment>
+  </data>
+  <data name="NewFolderDialogCloseButtonText" xml:space="preserve">
+    <value>Cancel</value>
+    <comment>The close button text for the new folder dialog</comment>
+  </data>
+  <data name="NewFolderDialogTextBoxHeader" xml:space="preserve">
+    <value>Enter folder name</value>
+    <comment>The textbox header for the new folder dialog</comment>
+  </data>
+  <data name="RenameFolderDialogTitle" xml:space="preserve">
+    <value>Rename Folder</value>
+    <comment>The title of the dialog for renaming a folder</comment>
+  </data>
+  <data name="RenameFolderDialogPrimaryButtonText" xml:space="preserve">
+    <value>Rename</value>
+    <comment>The primary button text for the rename folder dialog</comment>
+  </data>
+  <data name="RenameFolderDialogCloseButtonText" xml:space="preserve">
+    <value>Cancel</value>
+    <comment>The close button text for the rename folder dialog</comment>
+  </data>
+  <data name="RenameFolderDialogTextBoxHeader" xml:space="preserve">
+    <value>Enter new folder name</value>
+    <comment>The textbox header for the rename folder dialog</comment>
+  </data>
 </root>
