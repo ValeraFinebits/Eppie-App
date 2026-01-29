@@ -316,7 +316,7 @@ namespace Eppie.App.Views
                 stringProvider.GetString("NewFolderDialogTextBoxHeader"),
                 string.Empty,
                 this.XamlRoot,
-                async (folderName) =>
+                (folderName) =>
                 {
                     if (!string.IsNullOrWhiteSpace(folderName))
                     {
@@ -391,7 +391,7 @@ namespace Eppie.App.Views
                 stringProvider.GetString("RenameFolderDialogTextBoxHeader"),
                 mailBoxItem.Text,
                 this.XamlRoot,
-                async (newFolderName) =>
+                (newFolderName) =>
                 {
                     if (!string.IsNullOrWhiteSpace(newFolderName) && newFolderName != mailBoxItem.Text)
                     {
