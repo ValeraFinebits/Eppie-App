@@ -25,10 +25,10 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <!-- Context menu for mailbox root item -->
+                    <!--  Context menu for mailbox and folder items (visibility toggled via IsRootItem)  -->
                     <Grid.ContextFlyout>
                         <MenuFlyout>
-                            <!-- Mailbox menu items (shown when IsRootItem = true) -->
+                            <!--  Mailbox menu items (shown when IsRootItem = true)  -->
                             <MenuFlyoutItem x:Uid="/Eppie.App.UI/Controls/NewFolderMenuItem"
                                           Click="NewFolderMenuItemClick"
                                           Tag="{x:Bind}"
@@ -43,7 +43,7 @@
                                           Tag="{x:Bind}"
                                           Visibility="{x:Bind IsRootItem, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
 
-                            <!-- Folder menu items (shown when IsRootItem = false) -->
+                            <!--  Folder menu items (shown when IsRootItem = false)  -->
                             <MenuFlyoutItem x:Uid="/Eppie.App.UI/Controls/RenameFolderMenuItem"
                                           Click="RenameFolderMenuItemClick"
                                           Tag="{x:Bind}"

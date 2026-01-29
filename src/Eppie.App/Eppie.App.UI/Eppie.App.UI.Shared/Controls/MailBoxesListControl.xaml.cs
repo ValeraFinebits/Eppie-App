@@ -20,7 +20,6 @@ using Tuvi.App.ViewModels;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Foundation;
 using System.Diagnostics.CodeAnalysis;
-using System.Windows.Input;
 using Eppie.App.UI.Resources;
 
 
