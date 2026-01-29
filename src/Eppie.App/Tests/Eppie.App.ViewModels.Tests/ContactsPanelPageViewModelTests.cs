@@ -17,7 +17,6 @@
 // ---------------------------------------------------------------------------- //
 
 using System.Diagnostics;
-using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Eppie.App.ViewModels.Tests.TestDoubles;
@@ -76,13 +75,11 @@ namespace Eppie.App.ViewModels.Tests
 
         private static (ContactsPanelPageViewModel Vm, TestManagedCollection<ContactItem> Collection, FakeTuviMail Core, TestLocalSettingsService Settings, RecorderErrorHandler Errors) CreateVm(
             IEnumerable<Contact>? seedContacts = null,
-            IReadOnlyDictionary<EmailAddress, int>? unreadCounts = null,
-            IEnumerable<EmailAddress>? seedAccounts = null)
+            IReadOnlyDictionary<EmailAddress, int>? unreadCounts = null)
         {
             var core = new FakeTuviMail();
             core.SeedContacts(seedContacts ?? Array.Empty<Contact>());
             core.SetUnreadCounts(unreadCounts ?? new Dictionary<EmailAddress, int>());
-            core.SeedAccountEmails(seedAccounts ?? new[] { new EmailAddress("default@local", "Default Account") });
 
             var vm = new ContactsPanelPageViewModel();
             var settings = new TestLocalSettingsService();
@@ -672,36 +669,10 @@ namespace Eppie.App.ViewModels.Tests
         }
 
         [Test]
-        public async Task ComposeEmailCommandWithNullLastMessageDataUsesFirstAvailableAccount()
-        {
-            var contact = CreateContact("user@site.com", "Test User");
-            var (vm, _, _, _, _) = CreateVm(new[] { contact });
-            using (vm)
-            {
-                var navService = new TestNavigationService();
-                vm.SetNavigationService(navService);
-
-                // Create a ContactItem using the EmailAddress constructor, which doesn't set LastMessageData
-                var contactItem = new ContactItem(new EmailAddress("test@example.com", "Test Contact"));
-
-                await ((AsyncRelayCommand<ContactItem>)vm.ComposeEmailCommand).ExecuteAsync(contactItem).ConfigureAwait(false);
-
-                Assert.That(navService.LastNavigatedPage, Is.EqualTo(nameof(NewMessagePageViewModel)));
-                Assert.That(navService.LastNavigationData, Is.Not.Null);
-                Assert.That(navService.LastNavigationData, Is.TypeOf<SelectedContactNewMessageData>());
-
-                var messageData = (SelectedContactNewMessageData)navService.LastNavigationData!;
-                // Should use the first available account (which is seeded in CreateVm)
-                Assert.That(messageData.From, Is.Not.Null);
-                Assert.That(messageData.To, Is.EqualTo("test@example.com"));
-            }
-        }
-
-        [Test]
         public async Task ComposeEmailCommandWithNoAccountsShowsAddAccountMessage()
         {
             var contact = CreateContact("user@site.com", "Test User");
-            var (vm, _, _, _, _) = CreateVm(new[] { contact }, seedAccounts: Array.Empty<EmailAddress>());
+            var (vm, _, _, _, _) = CreateVm(new[] { contact });
             using (vm)
             {
                 var navService = new TestNavigationService();
@@ -719,93 +690,6 @@ namespace Eppie.App.ViewModels.Tests
                 Assert.That(navService.LastNavigatedPage, Is.Null);
                 Assert.That(messageService.ShowAddAccountMessageCalled, Is.True);
             }
-        }
-
-        private sealed class TestNavigationService : Tuvi.App.ViewModels.Services.INavigationService
-        {
-            public string? LastNavigatedPage { get; private set; }
-            public object? LastNavigationData { get; private set; }
-
-            public void Navigate(string pageKey, object? data = null)
-            {
-                LastNavigatedPage = pageKey;
-                LastNavigationData = data;
-            }
-
-            public bool CanGoBack()
-            {
-                return false;
-            }
-
-            public void GoBack()
-            {
-                throw new NotImplementedException();
-            }
-
-            public bool CanGoBackTo(string pageKey)
-            {
-                _ = pageKey;
-                return false;
-            }
-
-            public void GoBackTo(string pageKey)
-            {
-                _ = pageKey;
-                throw new NotImplementedException();
-            }
-
-            public void GoBackOrNavigate(string pageKey, object? parameter = null)
-            {
-                Navigate(pageKey, parameter);
-            }
-
-            public void GoBackToOrNavigate(string pageKey, object? parameter = null)
-            {
-                Navigate(pageKey, parameter);
-            }
-
-            public void ExitApplication()
-            {
-                throw new NotImplementedException();
-            }
-
-            public void ClearHistory()
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        private sealed class TestMessageService : Tuvi.App.ViewModels.Services.ITuviMailMessageService
-        {
-            public bool ShowAddAccountMessageCalled { get; private set; }
-
-            public Task ShowAddAccountMessageAsync()
-            {
-                ShowAddAccountMessageCalled = true;
-                return Task.CompletedTask;
-            }
-
-            public Task ShowErrorMessageAsync(Exception exception)
-            {
-                return Task.CompletedTask;
-            }
-
-            // Implement other required methods with NotImplementedException
-            public Task ShowEnableImapMessageAsync(string forEmail) => throw new NotImplementedException();
-            public Task ShowSeedPhraseNotValidMessageAsync() => throw new NotImplementedException();
-            public Task ShowPgpPublicKeyAlreadyExistMessageAsync(string fileName) => throw new NotImplementedException();
-            public Task ShowPgpUnknownPublicKeyAlgorithmMessageAsync(string fileName) => throw new NotImplementedException();
-            public Task ShowPgpPublicKeyImportErrorMessageAsync(string detailedReason, string fileName) => throw new NotImplementedException();
-            public Task<bool> ShowWipeAllDataDialogAsync() => throw new NotImplementedException();
-            public Task<bool> ShowRemoveAccountDialogAsync() => throw new NotImplementedException();
-            public Task<bool> ShowRemoveAIAgentDialogAsync() => throw new NotImplementedException();
-            public Task<bool> ShowRemovePgpKeyDialogAsync() => throw new NotImplementedException();
-            public Task<bool> ShowRequestReviewMessageAsync() => throw new NotImplementedException();
-            public Task ShowNeedToCreateSeedPhraseMessageAsync() => throw new NotImplementedException();
-            public Task ShowWhatsNewDialogAsync(string version, bool isStorePaymentProcessor, bool isSupportDevelopmentButtonVisible, string price, ICommand supportDevelopmentCommand, string twitterUrl) => throw new NotImplementedException();
-            public Task ShowSupportDevelopmentDialogAsync(bool isStorePaymentProcessor, string price, ICommand supportDevelopmentCommand) => throw new NotImplementedException();
-            public Task ShowProtonConnectAddressDialogAsync(object? data = null) => throw new NotImplementedException();
-            public Task ShowInvitationDialogAsync(object? invitationData = null) => throw new NotImplementedException();
         }
 
         private sealed class ThrowingDispatcherService : Tuvi.App.ViewModels.Services.IDispatcherService

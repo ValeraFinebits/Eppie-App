@@ -185,7 +185,7 @@ namespace Tuvi.App.ViewModels
                     return;
                 }
 
-                EmailAddress fromEmail = null;
+                EmailAddress fromEmail;
 
                 // Try to get the account email from LastMessageData
                 if (contactItem.LastMessageData?.AccountEmail != null)
@@ -208,11 +208,8 @@ namespace Tuvi.App.ViewModels
                     }
                 }
 
-                if (fromEmail != null)
-                {
-                    var messageData = new SelectedContactNewMessageData(fromEmail, contactItem.Email);
-                    NavigationService?.Navigate(nameof(NewMessagePageViewModel), messageData);
-                }
+                var messageData = new SelectedContactNewMessageData(fromEmail, contactItem.Email);
+                NavigationService?.Navigate(nameof(NewMessagePageViewModel), messageData);
             }
             catch (Exception ex)
             {

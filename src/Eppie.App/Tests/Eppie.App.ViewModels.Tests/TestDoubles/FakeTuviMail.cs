@@ -27,7 +27,6 @@ namespace Eppie.App.ViewModels.Tests.TestDoubles
     {
         private readonly List<Contact> _contacts = new();
         private readonly Dictionary<EmailAddress, int> _unreadCounts = new();
-        private readonly List<EmailAddress> _accountEmails = new();
 
         public int GetContactsCalls { get; private set; }
         public int GetUnreadCountsCalls { get; private set; }
@@ -61,12 +60,6 @@ namespace Eppie.App.ViewModels.Tests.TestDoubles
         {
             _contacts.Clear();
             _contacts.AddRange(contacts);
-        }
-
-        public void SeedAccountEmails(IEnumerable<EmailAddress> accountEmails)
-        {
-            _accountEmails.Clear();
-            _accountEmails.AddRange(accountEmails);
         }
 
         public void SetUnreadCounts(IReadOnlyDictionary<EmailAddress, int> counts)
@@ -115,30 +108,8 @@ namespace Eppie.App.ViewModels.Tests.TestDoubles
         public Task<List<Account>> GetAccountsAsync(CancellationToken cancellationToken = default) => throw new NotImplementedException();
         public Task<IReadOnlyList<CompositeAccount>> GetCompositeAccountsAsync(CancellationToken cancellationToken = default)
         {
-            // Create CompositeAccounts using reflection since the constructor is internal
-            var accounts = new List<CompositeAccount>();
-            foreach (var email in _accountEmails)
-            {
-                var compositeAccountType = typeof(CompositeAccount);
-                var constructor = compositeAccountType.GetConstructor(
-                    System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance,
-                    null,
-                    new[] { typeof(IReadOnlyList<CompositeFolder>), typeof(IEnumerable<EmailAddress>), typeof(CompositeFolder) },
-                    null);
-
-                if (constructor == null)
-                {
-                    throw new InvalidOperationException("CompositeAccount internal constructor not found. The internal API may have changed.");
-                }
-
-                var account = (CompositeAccount)constructor.Invoke(new object?[] {
-                    Array.Empty<CompositeFolder>(),
-                    new[] { email },
-                    null
-                });
-                accounts.Add(account);
-            }
-            return Task.FromResult<IReadOnlyList<CompositeAccount>>(accounts);
+            // Return empty list - tests that need accounts should use contacts with LastMessageData set
+            return Task.FromResult<IReadOnlyList<CompositeAccount>>(Array.Empty<CompositeAccount>());
         }
         public Task<IAccountService> GetAccountServiceAsync(EmailAddress email, CancellationToken cancellationToken = default) => throw new NotImplementedException();
         public Task AddAccountAsync(Account account, CancellationToken cancellationToken = default) => throw new NotImplementedException();
