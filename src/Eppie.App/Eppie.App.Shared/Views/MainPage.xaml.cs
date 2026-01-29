@@ -48,6 +48,16 @@ namespace Eppie.App.Views
 
         public ICommand MailBoxItemDropCommand => new RelayCommand<MailBoxItem>(MailBoxItemDropMessages, IsDropMessagesAllowed);
 
+        public ICommand NewFolderCommand => new RelayCommand<MailBoxItem>(NewFolder);
+
+        public ICommand MailboxSettingsCommand => new RelayCommand<MailBoxItem>(OpenMailboxSettings);
+
+        public ICommand RemoveMailboxCommand => new RelayCommand<MailBoxItem>(RemoveMailbox);
+
+        public ICommand RenameFolderCommand => new RelayCommand<MailBoxItem>(RenameFolder);
+
+        public ICommand DeleteFolderCommand => new RelayCommand<MailBoxItem>(DeleteFolder);
+
         public ICommand ShowAboutPageCommand => new RelayCommand(ShowAboutPage);
 
         public ICommand OpenAddressManagerCommand => new RelayCommand(ShowAddressManagerPane);
@@ -67,6 +77,11 @@ namespace Eppie.App.Views
             this.InitializeComponent();
 
             ViewModel.InitializeMailboxModel(MailBoxItemClickCommand, MailBoxItemDropCommand);
+            ViewModel.MailBoxesModel.NewFolderCommand = NewFolderCommand;
+            ViewModel.MailBoxesModel.MailboxSettingsCommand = MailboxSettingsCommand;
+            ViewModel.MailBoxesModel.RemoveMailboxCommand = RemoveMailboxCommand;
+            ViewModel.MailBoxesModel.RenameFolderCommand = RenameFolderCommand;
+            ViewModel.MailBoxesModel.DeleteFolderCommand = DeleteFolderCommand;
 
             NavigationMenu.PaneOpened += OnNavigationPaneToggled;
             NavigationMenu.PaneClosed += OnNavigationPaneToggled;
@@ -284,6 +299,38 @@ namespace Eppie.App.Views
         {
             ViewModel.MailBoxesModel.SelectedItem = null;
             contentFrame.Navigate(typeof(ContactMessagesPage), new ContactMessagesPageViewModel.NavigationData() { ContactItem = message.Value, ErrorHandler = this });
+        }
+
+        private void NewFolder(MailBoxItem mailBoxItem)
+        {
+            // TODO: Implement new folder creation
+            // This should show a dialog to enter folder name and create the folder
+        }
+
+        private void OpenMailboxSettings(MailBoxItem mailBoxItem)
+        {
+            // TODO: Implement opening mailbox settings
+            // This should navigate to the account settings page for the selected mailbox
+        }
+
+        private void RemoveMailbox(MailBoxItem mailBoxItem)
+        {
+            // TODO: Implement mailbox removal
+            // This should remove the account from the application
+            // Note: Confirmation dialog is already handled in MailBoxesListControl
+        }
+
+        private void RenameFolder(MailBoxItem mailBoxItem)
+        {
+            // TODO: Implement folder renaming
+            // This should show a dialog to enter new folder name and rename the folder
+        }
+
+        private void DeleteFolder(MailBoxItem mailBoxItem)
+        {
+            // TODO: Implement folder deletion
+            // This should delete the folder from the mailbox
+            // Note: Confirmation dialog is already handled in MailBoxesListControl
         }
 
         public override void HandleBack()
