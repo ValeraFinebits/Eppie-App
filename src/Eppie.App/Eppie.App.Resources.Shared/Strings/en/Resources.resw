@@ -1628,4 +1628,36 @@ Eppie
     </value>
     <comment>The text of the invitation email. {0} - Sender name. {1} - Sender email. {2} - Downloading url.</comment>
   </data>
+  <data name="RemoveMailboxDialogTitle" xml:space="preserve">
+    <value>Remove mailbox?</value>
+    <comment>The title of the dialog shown when user wants to remove a mailbox</comment>
+  </data>
+  <data name="RemoveMailboxDialogMessage" xml:space="preserve">
+    <value>Are you sure you want to remove this mailbox from Eppie on this device?</value>
+    <comment>The message of the dialog shown when user wants to remove a mailbox</comment>
+  </data>
+  <data name="RemoveMailboxDialogAcceptText" xml:space="preserve">
+    <value>Remove</value>
+    <comment>The accept button text for the remove mailbox dialog</comment>
+  </data>
+  <data name="RemoveMailboxDialogRejectText" xml:space="preserve">
+    <value>Cancel</value>
+    <comment>The reject button text for the remove mailbox dialog</comment>
+  </data>
+  <data name="DeleteFolderDialogTitle" xml:space="preserve">
+    <value>Delete folder?</value>
+    <comment>The title of the dialog shown when user wants to delete a folder</comment>
+  </data>
+  <data name="DeleteFolderDialogMessage" xml:space="preserve">
+    <value>Are you sure you want to delete this folder?</value>
+    <comment>The message of the dialog shown when user wants to delete a folder</comment>
+  </data>
+  <data name="DeleteFolderDialogAcceptText" xml:space="preserve">
+    <value>Delete</value>
+    <comment>The accept button text for the delete folder dialog</comment>
+  </data>
+  <data name="DeleteFolderDialogRejectText" xml:space="preserve">
+    <value>Cancel</value>
+    <comment>The reject button text for the delete folder dialog</comment>
+  </data>
 </root>
