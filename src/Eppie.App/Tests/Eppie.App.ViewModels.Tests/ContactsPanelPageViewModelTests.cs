@@ -22,6 +22,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using Eppie.App.ViewModels.Tests.TestDoubles;
 using NUnit.Framework;
 using Tuvi.App.ViewModels;
+using Tuvi.App.ViewModels.Common;
 using Tuvi.App.ViewModels.Messages;
 using Tuvi.Core.Entities;
 
@@ -631,6 +632,93 @@ namespace Eppie.App.ViewModels.Tests
 
                 await SpinWaitAsync(() => errors.Errors.Count > 0, failMessage: "Expected error handler to be invoked after dispatcher exception.").ConfigureAwait(false);
                 Assert.That(errors.Errors.Last(), Is.TypeOf<InvalidOperationException>());
+            }
+        }
+
+        [Test]
+        public void ComposeEmailCommandNullArgumentThrowsArgumentNullException()
+        {
+            var (vm, _, _, _, _) = CreateVm();
+            using (vm)
+            {
+                Assert.That(() => vm.ComposeEmailCommand.Execute(null), Throws.InstanceOf<ArgumentNullException>());
+            }
+        }
+
+        [Test]
+        public void ComposeEmailCommandNavigatesToNewMessagePageWithCorrectData()
+        {
+            var contact = CreateContact("user@site.com", "Test User");
+            var (vm, _, _, _, _) = CreateVm(new[] { contact });
+            using (vm)
+            {
+                var navService = new TestNavigationService();
+                vm.SetNavigationService(navService);
+
+                var contactItem = new ContactItem(contact);
+                vm.ComposeEmailCommand.Execute(contactItem);
+
+                Assert.That(navService.LastNavigatedPage, Is.EqualTo(nameof(NewMessagePageViewModel)));
+                Assert.That(navService.LastNavigationData, Is.Not.Null);
+                Assert.That(navService.LastNavigationData, Is.TypeOf<SelectedContactNewMessageData>());
+
+                var messageData = (SelectedContactNewMessageData)navService.LastNavigationData!;
+                Assert.That(messageData.From.Address, Is.EqualTo("acc@local"));
+                Assert.That(messageData.To, Is.EqualTo("user@site.com"));
+            }
+        }
+
+        private sealed class TestNavigationService : Tuvi.App.ViewModels.Services.INavigationService
+        {
+            public string? LastNavigatedPage { get; private set; }
+            public object? LastNavigationData { get; private set; }
+
+            public void Navigate(string pageKey, object? data = null)
+            {
+                LastNavigatedPage = pageKey;
+                LastNavigationData = data;
+            }
+
+            public bool CanGoBack()
+            {
+                return false;
+            }
+
+            public void GoBack()
+            {
+                throw new NotImplementedException();
+            }
+
+            public bool CanGoBackTo(string pageKey)
+            {
+                _ = pageKey;
+                return false;
+            }
+
+            public void GoBackTo(string pageKey)
+            {
+                _ = pageKey;
+                throw new NotImplementedException();
+            }
+
+            public void GoBackOrNavigate(string pageKey, object? parameter = null)
+            {
+                Navigate(pageKey, parameter);
+            }
+
+            public void GoBackToOrNavigate(string pageKey, object? parameter = null)
+            {
+                Navigate(pageKey, parameter);
+            }
+
+            public void ExitApplication()
+            {
+                throw new NotImplementedException();
+            }
+
+            public void ClearHistory()
+            {
+                throw new NotImplementedException();
             }
         }
 
