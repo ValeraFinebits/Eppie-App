@@ -199,7 +199,9 @@ namespace Tuvi.App.ViewModels
             {
                 if (_message.To == null)
                     return 0;
-                return _message.To.Count();
+                var count = _message.To.Count();
+                // Return count minus 1 since one recipient is shown as avatar
+                return count > 0 ? count - 1 : 0;
             }
         }
 
