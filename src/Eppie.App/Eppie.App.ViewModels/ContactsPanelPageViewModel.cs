@@ -179,7 +179,7 @@ namespace Tuvi.App.ViewModels
             try
             {
                 // Check if contact has an email address
-                if (contactItem.Email == null)
+                if (contactItem.Email is null)
                 {
                     OnError(new InvalidOperationException("Selected contact does not have an email address."));
                     return;
