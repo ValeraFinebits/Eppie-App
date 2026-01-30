@@ -110,171 +110,171 @@
                     <Grid Padding="16,12"
                           BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
                           BorderThickness="0,0,0,1">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <!--  Unread indicator  -->
-                        <ColumnDefinition Width="8" />
-                        <!--  Spacing  -->
-                        <ColumnDefinition Width="Auto" />
-                        <!--  Avatar  -->
-                        <ColumnDefinition Width="12" />
-                        <!--  Spacing  -->
-                        <ColumnDefinition Width="*" />
-                        <!--  Content  -->
-                        <ColumnDefinition Width="Auto" />
-                        <!--  Metadata  -->
-                    </Grid.ColumnDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <!--  Unread indicator  -->
+                            <ColumnDefinition Width="8" />
+                            <!--  Spacing  -->
+                            <ColumnDefinition Width="Auto" />
+                            <!--  Avatar  -->
+                            <ColumnDefinition Width="12" />
+                            <!--  Spacing  -->
+                            <ColumnDefinition Width="*" />
+                            <!--  Content  -->
+                            <ColumnDefinition Width="Auto" />
+                            <!--  Metadata  -->
+                        </Grid.ColumnDefinitions>
 
-                    <!--  Unread indicator icon  -->
-                    <Grid Grid.Column="0"
-                          Width="24"
-                          Height="24"
-                          VerticalAlignment="Top">
-                        <SymbolIcon Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"
-                                    Symbol="Mail"
-                                    Visibility="{Binding IsMarkedAsRead, Converter={StaticResource InverseBoolToVisibilityConverter}}" />
-                        <SymbolIcon Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                    Symbol="Read"
-                                    Visibility="{Binding IsMarkedAsRead}" />
-                    </Grid>
+                        <!--  Unread indicator icon  -->
+                        <Grid Grid.Column="0"
+                              Width="24"
+                              Height="24"
+                              VerticalAlignment="Top">
+                            <SymbolIcon Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"
+                                        Symbol="Mail"
+                                        Visibility="{Binding IsMarkedAsRead, Converter={StaticResource InverseBoolToVisibilityConverter}}" />
+                            <SymbolIcon Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                        Symbol="Read"
+                                        Visibility="{Binding IsMarkedAsRead}" />
+                        </Grid>
 
-                    <!--  Sender Avatar  -->
-                    <PersonPicture Grid.Column="2"
-                                   Width="48"
-                                   Height="48"
-                                   VerticalAlignment="Top"
-                                   DisplayName="{Binding MessageSender, Mode=OneWay}" />
+                        <!--  Sender Avatar  -->
+                        <PersonPicture Grid.Column="2"
+                                       Width="48"
+                                       Height="48"
+                                       VerticalAlignment="Top"
+                                       DisplayName="{Binding MessageSender, Mode=OneWay}" />
 
-                    <!--  Main content area  -->
-                    <StackPanel Grid.Column="4" VerticalAlignment="Top">
+                        <!--  Main content area  -->
+                        <StackPanel Grid.Column="4" VerticalAlignment="Top">
 
-                        <!--  Sender name and email  -->
-                        <TextBlock FontSize="14"
-                                   FontWeight="{Binding IsMarkedAsRead, Converter={StaticResource InverseBoolToFontWeightConverter}}"
-                                   Text="{Binding MessageSender}"
-                                   TextTrimming="CharacterEllipsis" />
-                        <TextBlock Margin="0,2,0,4"
-                                   FontSize="12"
-                                   Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                   Text="{Binding SenderEmail}"
-                                   TextTrimming="CharacterEllipsis" />
-
-                        <!--  Subject with P2P badge  -->
-                        <StackPanel Margin="0,0,0,4"
-                                    Orientation="Horizontal"
-                                    Spacing="8">
-                            <Border Padding="6,2"
-                                    Background="{ThemeResource SystemFillColorAttentionBackgroundBrush}"
-                                    CornerRadius="4"
-                                    Visibility="{Binding IsDecentralized}">
-                                <TextBlock x:Uid="P2PLabel"
-                                           FontSize="11"
-                                           FontWeight="SemiBold"
-                                           Foreground="{ThemeResource SystemFillColorCriticalBrush}" />
-                            </Border>
-                            <TextBlock VerticalAlignment="Center"
-                                       FontSize="14"
+                            <!--  Sender name and email  -->
+                            <TextBlock FontSize="14"
                                        FontWeight="{Binding IsMarkedAsRead, Converter={StaticResource InverseBoolToFontWeightConverter}}"
-                                       Text="{Binding MessageSubject}"
+                                       Text="{Binding MessageSender}"
+                                       TextTrimming="CharacterEllipsis" />
+                            <TextBlock Margin="0,2,0,4"
+                                       FontSize="12"
+                                       Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                       Text="{Binding SenderEmail}"
+                                       TextTrimming="CharacterEllipsis" />
+
+                            <!--  Subject with P2P badge  -->
+                            <StackPanel Margin="0,0,0,4"
+                                        Orientation="Horizontal"
+                                        Spacing="8">
+                                <Border Padding="6,2"
+                                        Background="{ThemeResource SystemFillColorAttentionBackgroundBrush}"
+                                        CornerRadius="4"
+                                        Visibility="{Binding IsDecentralized}">
+                                    <TextBlock x:Uid="P2PLabel"
+                                               FontSize="11"
+                                               FontWeight="SemiBold"
+                                               Foreground="{ThemeResource SystemFillColorCriticalBrush}" />
+                                </Border>
+                                <TextBlock VerticalAlignment="Center"
+                                           FontSize="14"
+                                           FontWeight="{Binding IsMarkedAsRead, Converter={StaticResource InverseBoolToFontWeightConverter}}"
+                                           Text="{Binding MessageSubject}"
+                                           TextTrimming="CharacterEllipsis" />
+                            </StackPanel>
+
+                            <!--  Preview text  -->
+                            <TextBlock FontSize="13"
+                                       Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                       MaxLines="1"
+                                       Text="{Binding PreviewText, Mode=OneWay}"
                                        TextTrimming="CharacterEllipsis" />
                         </StackPanel>
 
-                        <!--  Preview text  -->
-                        <TextBlock FontSize="13"
-                                   Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                   MaxLines="1"
-                                   Text="{Binding PreviewText, Mode=OneWay}"
-                                   TextTrimming="CharacterEllipsis" />
-                    </StackPanel>
+                        <!--  Right metadata section  -->
+                        <StackPanel x:Name="MetadataPanel"
+                                    Grid.Column="5"
+                                    Margin="16,0,0,0"
+                                    VerticalAlignment="Top"
+                                    Orientation="Horizontal"
+                                    Spacing="16">
 
-                    <!--  Right metadata section  -->
-                    <StackPanel x:Name="MetadataPanel"
-                                Grid.Column="5"
-                                Margin="16,0,0,0"
-                                VerticalAlignment="Top"
-                                Orientation="Horizontal"
-                                Spacing="16">
+                            <!--  Attachment indicator with count  -->
+                            <StackPanel Orientation="Horizontal"
+                                        Spacing="4"
+                                        Visibility="{Binding HasAttachments, Mode=OneWay}">
+                                <SymbolIcon Symbol="Attach" />
+                                <TextBlock VerticalAlignment="Center"
+                                           FontSize="13"
+                                           Text="{Binding AttachmentCount}" />
+                            </StackPanel>
 
-                        <!--  Attachment indicator with count  -->
-                        <StackPanel Orientation="Horizontal"
-                                    Spacing="4"
-                                    Visibility="{Binding HasAttachments, Mode=OneWay}">
-                            <SymbolIcon Symbol="Attach" />
-                            <TextBlock VerticalAlignment="Center"
-                                       FontSize="13"
-                                       Text="{Binding AttachmentCount}" />
-                        </StackPanel>
-
-                        <!--  Recipients preview  -->
-                        <StackPanel Orientation="Horizontal" Spacing="8">
-                            <TextBlock x:Uid="MessageTo"
-                                       VerticalAlignment="Center"
-                                       FontSize="13"
-                                       Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
-                            <StackPanel Orientation="Horizontal" Spacing="-8">
-                                <PersonPicture Width="24"
-                                               Height="24"
-                                               DisplayName="{Binding FirstRecipientDisplayName, Mode=OneWay}" />
-                                <TextBlock Margin="12,0,0,0"
+                            <!--  Recipients preview  -->
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <TextBlock x:Uid="MessageTo"
                                            VerticalAlignment="Center"
                                            FontSize="13"
-                                           Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                           Visibility="{Binding AdditionalRecipientCount, Converter={StaticResource IntToVisibilityConverter}}">
-                                    <Run Text="+" /><Run Text="{Binding AdditionalRecipientCount}" />
-                                </TextBlock>
+                                           Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                                <StackPanel Orientation="Horizontal" Spacing="-8">
+                                    <PersonPicture Width="24"
+                                                   Height="24"
+                                                   DisplayName="{Binding FirstRecipientDisplayName, Mode=OneWay}" />
+                                    <TextBlock Margin="12,0,0,0"
+                                               VerticalAlignment="Center"
+                                               FontSize="13"
+                                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                               Visibility="{Binding AdditionalRecipientCount, Converter={StaticResource IntToVisibilityConverter}}">
+                                        <Run Text="+" /><Run Text="{Binding AdditionalRecipientCount}" />
+                                    </TextBlock>
+                                </StackPanel>
                             </StackPanel>
+
+                            <!--  Timestamp  -->
+                            <TextBlock MinWidth="120"
+                                       VerticalAlignment="Center"
+                                       FontSize="13"
+                                       Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                       Text="{Binding DateBriefString}"
+                                       TextAlignment="Right" />
                         </StackPanel>
 
-                        <!--  Timestamp  -->
-                        <TextBlock MinWidth="120"
-                                   VerticalAlignment="Center"
-                                   FontSize="13"
-                                   Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                   Text="{Binding DateBriefString}"
-                                   TextAlignment="Right" />
-                    </StackPanel>
+                        <!--  Hover command bar (hidden by default)  -->
+                        <CommandBar x:Name="CommandBar"
+                                    Grid.Column="5"
+                                    VerticalAlignment="Center"
+                                    Background="Transparent"
+                                    OverflowButtonVisibility="Collapsed"
+                                    Visibility="Collapsed">
+                            <AppBarButton Command="{StaticResource DeleteItemCommand}" CommandParameter="{Binding}" />
+                            <AppBarButton x:Uid="/App.Resources/MarkAsReadButton"
+                                          Command="{StaticResource MarkAsReadItemCommand}"
+                                          CommandParameter="{Binding}"
+                                          Visibility="{Binding IsMarkedAsRead, Converter={StaticResource InverseBoolToVisibilityConverter}}" />
+                            <AppBarButton x:Uid="/App.Resources/MarkAsUnreadButton"
+                                          Command="{StaticResource MarkAsUnreadItemCommand}"
+                                          CommandParameter="{Binding}"
+                                          Visibility="{Binding IsMarkedAsRead}" />
+                            <AppBarButton x:Uid="/App.Resources/SetFlagButton"
+                                          Command="{StaticResource FlagItemCommand}"
+                                          CommandParameter="{Binding}"
+                                          Visibility="{Binding IsFlagged, Converter={StaticResource InverseBoolToVisibilityConverter}}" />
+                            <AppBarButton x:Uid="/App.Resources/ClearFlagButton"
+                                          Command="{StaticResource UnflagItemCommand}"
+                                          CommandParameter="{Binding}"
+                                          Visibility="{Binding IsFlagged}" />
+                        </CommandBar>
 
-                    <!--  Hover command bar (hidden by default)  -->
-                    <CommandBar x:Name="CommandBar"
-                                Grid.Column="5"
-                                VerticalAlignment="Center"
-                                Background="Transparent"
-                                OverflowButtonVisibility="Collapsed"
-                                Visibility="Collapsed">
-                        <AppBarButton Command="{StaticResource DeleteItemCommand}" CommandParameter="{Binding}" />
-                        <AppBarButton x:Uid="/App.Resources/MarkAsReadButton"
-                                      Command="{StaticResource MarkAsReadItemCommand}"
-                                      CommandParameter="{Binding}"
-                                      Visibility="{Binding IsMarkedAsRead, Converter={StaticResource InverseBoolToVisibilityConverter}}" />
-                        <AppBarButton x:Uid="/App.Resources/MarkAsUnreadButton"
-                                      Command="{StaticResource MarkAsUnreadItemCommand}"
-                                      CommandParameter="{Binding}"
-                                      Visibility="{Binding IsMarkedAsRead}" />
-                        <AppBarButton x:Uid="/App.Resources/SetFlagButton"
-                                      Command="{StaticResource FlagItemCommand}"
-                                      CommandParameter="{Binding}"
-                                      Visibility="{Binding IsFlagged, Converter={StaticResource InverseBoolToVisibilityConverter}}" />
-                        <AppBarButton x:Uid="/App.Resources/ClearFlagButton"
-                                      Command="{StaticResource UnflagItemCommand}"
-                                      CommandParameter="{Binding}"
-                                      Visibility="{Binding IsFlagged}" />
-                    </CommandBar>
-
-                    <!--</SwipeControl>-->
-                    <!--  It leaks see TVM-344  -->
-                    <VisualStateManager.VisualStateGroups>
-                        <VisualStateGroup x:Name="HoveringStates">
-                            <VisualState x:Name="HoverButtonsHidden" />
-                            <VisualState x:Name="HoverButtonsShown">
-                                <VisualState.Setters>
-                                    <Setter Target="CommandBar.Visibility" Value="Visible" />
-                                    <Setter Target="MetadataPanel.Visibility" Value="Collapsed" />
-                                </VisualState.Setters>
-                            </VisualState>
-                        </VisualStateGroup>
-                    </VisualStateManager.VisualStateGroups>
+                        <!--</SwipeControl>-->
+                        <!--  It leaks see TVM-344  -->
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="HoveringStates">
+                                <VisualState x:Name="HoverButtonsHidden" />
+                                <VisualState x:Name="HoverButtonsShown">
+                                    <VisualState.Setters>
+                                        <Setter Target="CommandBar.Visibility" Value="Visible" />
+                                        <Setter Target="MetadataPanel.Visibility" Value="Collapsed" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Grid>
                 </Grid>
-            </Grid>
             </UserControl>
         </DataTemplate>
 
