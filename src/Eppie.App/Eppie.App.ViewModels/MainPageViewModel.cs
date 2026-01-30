@@ -49,6 +49,7 @@ namespace Tuvi.App.ViewModels
         int AttachmentCount { get; }
         int RecipientCount { get; }
         string SenderEmail { get; }
+        string FirstRecipientDisplayName { get; }
         bool IsMarkedAsRead { get; }
         bool IsFlagged { get; }
         bool WasDeleted { get; }
@@ -209,10 +210,21 @@ namespace Tuvi.App.ViewModels
         {
             get
             {
-                if (_message.From == null || !_message.From.Any())
-                    return "";
-                var firstSender = _message.From.First();
-                return firstSender?.Address ?? "";
+                if (_message.From == null)
+                    return string.Empty;
+                var firstSender = _message.From.FirstOrDefault();
+                return firstSender?.Address ?? string.Empty;
+            }
+        }
+
+        public string FirstRecipientDisplayName
+        {
+            get
+            {
+                if (_message.To == null)
+                    return string.Empty;
+                var firstRecipient = _message.To.FirstOrDefault();
+                return firstRecipient?.DisplayName ?? string.Empty;
             }
         }
 
