@@ -692,6 +692,31 @@ namespace Eppie.App.ViewModels.Tests
             }
         }
 
+        [Test]
+        public async Task ComposeEmailCommandWithNullEmailReportsError()
+        {
+            var contact = CreateContact("user@site.com", "Test User");
+            var (vm, _, _, _, errors) = CreateVm(new[] { contact });
+            using (vm)
+            {
+                var navService = new TestNavigationService();
+                vm.SetNavigationService(navService);
+
+                // Create a ContactItem with parameterless constructor, which leaves Email null
+                var contactItem = new ContactItem();
+
+                await ((AsyncRelayCommand<ContactItem>)vm.ComposeEmailCommand).ExecuteAsync(contactItem).ConfigureAwait(false);
+
+                // Should not navigate when email is null
+                Assert.That(navService.LastNavigatedPage, Is.Null);
+
+                // Should report error
+                Assert.That(errors.Errors.Count, Is.EqualTo(1));
+                Assert.That(errors.Errors[0], Is.TypeOf<InvalidOperationException>());
+                Assert.That(errors.Errors[0].Message, Is.EqualTo("Selected contact does not have an email address."));
+            }
+        }
+
         private sealed class ThrowingDispatcherService : Tuvi.App.ViewModels.Services.IDispatcherService
         {
             private readonly Exception _exception;
