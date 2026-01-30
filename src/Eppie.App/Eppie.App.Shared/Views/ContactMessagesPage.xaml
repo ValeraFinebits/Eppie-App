@@ -144,7 +144,7 @@
                                    FontWeight="{Binding IsMarkedAsRead, Converter={StaticResource InverseBoolToFontWeightConverter}}"
                                    FontSize="14"
                                    TextTrimming="CharacterEllipsis" />
-                        <TextBlock Text="{Binding MessageSender}"
+                        <TextBlock Text="{Binding SenderEmail}"
                                    FontSize="12"
                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                                    TextTrimming="CharacterEllipsis"
@@ -188,7 +188,7 @@
                                     Spacing="4"
                                     Visibility="{Binding HasAttachments, Mode=OneWay}">
                             <SymbolIcon Symbol="Attach" FontSize="16" />
-                            <TextBlock Text="3" 
+                            <TextBlock Text="{Binding AttachmentCount}" 
                                        FontSize="13"
                                        VerticalAlignment="Center" />
                         </StackPanel>
@@ -203,11 +203,12 @@
                                 <PersonPicture Width="24" 
                                                Height="24"
                                                DisplayName="{Binding MessageReceiver, Mode=OneWay}" />
-                                <TextBlock Text="+5"
-                                           FontSize="13"
+                                <TextBlock FontSize="13"
                                            VerticalAlignment="Center"
                                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                           Margin="12,0,0,0" />
+                                           Margin="12,0,0,0">
+                                    <Run Text="+"/><Run Text="{Binding RecipientCount}"/>
+                                </TextBlock>
                             </StackPanel>
                         </StackPanel>
 

@@ -46,6 +46,9 @@ namespace Tuvi.App.ViewModels
         string DateFullString { get; }
         string PreviewText { get; }
         bool HasAttachments { get; }
+        int AttachmentCount { get; }
+        int RecipientCount { get; }
+        string SenderEmail { get; }
         bool IsMarkedAsRead { get; }
         bool IsFlagged { get; }
         bool WasDeleted { get; }
@@ -183,6 +186,32 @@ namespace Tuvi.App.ViewModels
         public bool HasAttachments
         {
             get { return Attachments.Count > 0; }
+        }
+
+        public int AttachmentCount
+        {
+            get { return Attachments.Count; }
+        }
+
+        public int RecipientCount
+        {
+            get
+            {
+                if (_message.To == null)
+                    return 0;
+                return _message.To.Count();
+            }
+        }
+
+        public string SenderEmail
+        {
+            get
+            {
+                if (_message.From == null || !_message.From.Any())
+                    return "";
+                var firstSender = _message.From.First();
+                return firstSender?.Address ?? "";
+            }
         }
 
         public bool IsMarkedAsRead
