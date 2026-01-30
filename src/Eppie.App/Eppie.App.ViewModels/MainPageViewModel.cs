@@ -186,21 +186,19 @@ namespace Tuvi.App.ViewModels
 
         public bool HasAttachments
         {
-            get { return Attachments.Count > 0; }
+            get { return _message.Attachments != null && _message.Attachments.Count > 0; }
         }
 
         public int AttachmentCount
         {
-            get { return Attachments.Count; }
+            get { return _message.Attachments?.Count ?? 0; }
         }
 
         public int RecipientCount
         {
             get
             {
-                if (_message.To == null)
-                    return 0;
-                var count = _message.To.Count();
+                var count = _message.To?.Count ?? 0;
                 // Return count minus 1 since one recipient is shown as avatar
                 return count > 0 ? count - 1 : 0;
             }
@@ -367,6 +365,10 @@ namespace Tuvi.App.ViewModels
             OnPropertyChanged(nameof(PreviewText));
             OnPropertyChanged(nameof(Attachments));
             OnPropertyChanged(nameof(HasAttachments));
+            OnPropertyChanged(nameof(AttachmentCount));
+            OnPropertyChanged(nameof(RecipientCount));
+            OnPropertyChanged(nameof(SenderEmail));
+            OnPropertyChanged(nameof(FirstRecipientDisplayName));
             OnPropertyChanged(nameof(IsMarkedAsRead));
             OnPropertyChanged(nameof(IsFlagged));
             OnPropertyChanged(nameof(DateBriefString));

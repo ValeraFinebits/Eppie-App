@@ -194,7 +194,7 @@
                                        VerticalAlignment="Center" />
                         </StackPanel>
 
-                        <!-- Recipients preview (only show if RecipientCount > 0) -->
+                        <!-- Recipients preview -->
                         <StackPanel Orientation="Horizontal" Spacing="8">
                             <TextBlock x:Uid="MessageTo"
                                        FontSize="13"
