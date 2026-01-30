@@ -47,7 +47,7 @@ namespace Tuvi.App.ViewModels
         string PreviewText { get; }
         bool HasAttachments { get; }
         int AttachmentCount { get; }
-        int RecipientCount { get; }
+        int AdditionalRecipientCount { get; }
         string SenderEmail { get; }
         string FirstRecipientDisplayName { get; }
         bool IsMarkedAsRead { get; }
@@ -194,7 +194,7 @@ namespace Tuvi.App.ViewModels
             get { return _message.Attachments?.Count ?? 0; }
         }
 
-        public int RecipientCount
+        public int AdditionalRecipientCount
         {
             get
             {
@@ -366,7 +366,7 @@ namespace Tuvi.App.ViewModels
             OnPropertyChanged(nameof(Attachments));
             OnPropertyChanged(nameof(HasAttachments));
             OnPropertyChanged(nameof(AttachmentCount));
-            OnPropertyChanged(nameof(RecipientCount));
+            OnPropertyChanged(nameof(AdditionalRecipientCount));
             OnPropertyChanged(nameof(SenderEmail));
             OnPropertyChanged(nameof(FirstRecipientDisplayName));
             OnPropertyChanged(nameof(IsMarkedAsRead));
