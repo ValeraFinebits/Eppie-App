@@ -72,7 +72,10 @@
         </XamlUICommand>
 
         <DataTemplate x:Key="DefaultMessageItemTemplate" x:DataType="viewmodels:IMessageInfo">
+            <!--<UserControl PointerEntered="ListViewSwipeContainerPointerEntered"
+                         PointerExited="ListViewSwipeContainerPointerExited">-->
             <UserControl>
+                <!--  It leaks see TVM-344  -->
                 <UserControl.ContextFlyout>
                     <MenuFlyout>
                         <MenuFlyoutItem Command="{StaticResource MarkAsReadItemCommand}"
