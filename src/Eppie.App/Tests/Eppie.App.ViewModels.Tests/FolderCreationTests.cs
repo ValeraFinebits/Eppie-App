@@ -45,7 +45,7 @@ namespace Eppie.App.ViewModels.Tests
         {
             // Arrange
             var (vm, core) = CreateViewModel();
-            try
+            using (core)
             {
                 vm.InitializeMailboxModel(null, null);
                 var accountEmail = new EmailAddress("test@example.com");
@@ -67,10 +67,6 @@ namespace Eppie.App.ViewModels.Tests
                 Assert.That(createdFolder, Is.Not.Null, "Created folder should not be null");
                 Assert.That(createdFolder!.FullName, Is.EqualTo(folderName), "Folder name should match");
             }
-            finally
-            {
-                core.Dispose();
-            }
         }
 
         [Test]
@@ -78,7 +74,7 @@ namespace Eppie.App.ViewModels.Tests
         {
             // Arrange
             var (vm, core) = CreateViewModel();
-            try
+            using (core)
             {
                 vm.InitializeMailboxModel(null, null);
                 var accountEmail = new EmailAddress("test@example.com");
@@ -90,10 +86,6 @@ namespace Eppie.App.ViewModels.Tests
                     await vm.CreateFolderAsync(accountEmail, string.Empty).ConfigureAwait(false);
                 });
             }
-            finally
-            {
-                core.Dispose();
-            }
         }
 
         [Test]
@@ -101,7 +93,7 @@ namespace Eppie.App.ViewModels.Tests
         {
             // Arrange
             var (vm, core) = CreateViewModel();
-            try
+            using (core)
             {
                 vm.InitializeMailboxModel(null, null);
                 var accountEmail = new EmailAddress("test@example.com");
@@ -121,18 +113,12 @@ namespace Eppie.App.ViewModels.Tests
                 // Act
                 await vm.CreateFolderAsync(accountEmail, folderName).ConfigureAwait(false);
 
-                // Give the event handler time to execute
-                await Task.Delay(100).ConfigureAwait(false);
-
                 // Assert
                 // The ViewModel should have subscribed to FolderCreated event via OnNavigatedTo -> SubscribeEvents
                 // When CreateFolderAsync is called, the event is raised and the ViewModel's OnFolderCreated
                 // handler calls UpdateAccountsList to refresh the UI
+                // TestDispatcherService executes synchronously, so no delay is needed
                 Assert.That(folderCreatedEventFired, Is.True, "FolderCreated event should be fired and handled by ViewModel");
-            }
-            finally
-            {
-                core.Dispose();
             }
         }
     }
