@@ -110,10 +110,6 @@ namespace Eppie.App.ViewModels.Tests
                 await vm.CreateFolderAsync(accountEmail, folderName).ConfigureAwait(false);
 
                 // Assert
-                // The ViewModel should have subscribed to FolderCreated event via OnNavigatedTo -> SubscribeEvents
-                // When CreateFolderAsync is called, the event is raised and the ViewModel's OnFolderCreated
-                // handler calls UpdateAccountsList to refresh the UI
-                // TestDispatcherService executes synchronously, so no delay is needed
                 Assert.That(folderCreatedEventFired, Is.True, "FolderCreated event should be fired and handled by ViewModel");
             }
         }
