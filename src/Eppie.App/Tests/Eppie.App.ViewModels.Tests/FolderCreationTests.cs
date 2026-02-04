@@ -100,7 +100,6 @@ namespace Eppie.App.ViewModels.Tests
 
                 vm.OnNavigatedTo(null);
 
-                // Track if the ViewModel's event handler is triggered via the FolderCreated event
                 bool folderCreatedEventFired = false;
                 core.FolderCreated += (sender, args) =>
                 {
