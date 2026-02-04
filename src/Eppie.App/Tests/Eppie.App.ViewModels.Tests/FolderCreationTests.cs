@@ -1,4 +1,4 @@
-// ---------------------------------------------------------------------------- //
+﻿// ---------------------------------------------------------------------------- //
 //                                                                              //
 //   Copyright 2026 Eppie (https://eppie.io)                                    //
 //                                                                              //
@@ -28,7 +28,7 @@ namespace Eppie.App.ViewModels.Tests
     public sealed class FolderCreationTests
     {
         [SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "Test doubles don't need disposal in tests")]
-        private static MainPageViewModel CreateViewModel()
+        private static (MainPageViewModel Vm, FakeTuviMail Core) CreateViewModel()
         {
             var core = new FakeTuviMail();
             var vm = new MainPageViewModel();
@@ -39,43 +39,50 @@ namespace Eppie.App.ViewModels.Tests
             vm.SetLocalizationService(new TestLocalizationService());
             vm.SetMessageService(new TestMessageService());
 
-            return vm;
+            return (vm, core);
         }
 
         [Test]
         [SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores", Justification = "Test naming convention")]
-        public async Task CreateFolderAsync_ValidInput_ShouldCallCoreAndRefresh()
+        public async Task CreateFolderAsync_ValidInput_ShouldCreateFolderAndRaiseEvent()
         {
             // Arrange
-            var vm = CreateViewModel();
+            var (vm, core) = CreateViewModel();
             vm.InitializeMailboxModel(null, null);
             var accountEmail = new EmailAddress("test@example.com");
             var folderName = "TestFolder";
+
+            bool eventRaised = false;
+            Folder? createdFolder = null;
+            core.FolderCreated += (sender, args) =>
+            {
+                eventRaised = true;
+                createdFolder = args.Folder;
+            };
 
             // Act
             await vm.CreateFolderAsync(accountEmail, folderName).ConfigureAwait(false);
 
             // Assert
-            // The test passes if no exception is thrown and the method completes
-            Assert.Pass("Folder creation completed successfully");
+            Assert.That(eventRaised, Is.True, "FolderCreated event should be raised");
+            Assert.That(createdFolder, Is.Not.Null, "Created folder should not be null");
+            Assert.That(createdFolder!.FullName, Is.EqualTo(folderName), "Folder name should match");
         }
 
         [Test]
         [SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores", Justification = "Test naming convention")]
-        public void CreateFolderAsync_ValidFolderName_ShouldNotThrow()
+        public void CreateFolderAsync_EmptyFolderName_ShouldNotThrow()
         {
             // Arrange
-            var vm = CreateViewModel();
+            var (vm, _) = CreateViewModel();
             vm.InitializeMailboxModel(null, null);
             var accountEmail = new EmailAddress("test@example.com");
 
             // Act & Assert
-            // The actual CreateFolderAsync might throw if passed null, 
-            // but this test ensures the ViewModel method exists and can be called
+            // Empty folder name should be handled gracefully by the Core implementation
             Assert.DoesNotThrowAsync(async () =>
             {
-                // We expect the Core implementation to handle validation
-                await vm.CreateFolderAsync(accountEmail, "ValidName").ConfigureAwait(false);
+                await vm.CreateFolderAsync(accountEmail, string.Empty).ConfigureAwait(false);
             });
         }
     }
