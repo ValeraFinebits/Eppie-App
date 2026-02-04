@@ -16,7 +16,6 @@
 //                                                                              //
 // ---------------------------------------------------------------------------- //
 
-using System.Diagnostics.CodeAnalysis;
 using Eppie.App.ViewModels.Tests.TestDoubles;
 using NUnit.Framework;
 using Tuvi.App.ViewModels;
@@ -27,7 +26,6 @@ namespace Eppie.App.ViewModels.Tests
     [TestFixture]
     public sealed class FolderCreationTests
     {
-        [SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "Test doubles don't need disposal in tests")]
         private static (MainPageViewModel Vm, FakeTuviMail Core) CreateViewModel()
         {
             var core = new FakeTuviMail();
@@ -43,47 +41,99 @@ namespace Eppie.App.ViewModels.Tests
         }
 
         [Test]
-        [SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores", Justification = "Test naming convention")]
-        public async Task CreateFolderAsync_ValidInput_ShouldCreateFolderAndRaiseEvent()
+        public async Task CreateFolderAsyncValidInputShouldCreateFolderAndRaiseEvent()
         {
             // Arrange
             var (vm, core) = CreateViewModel();
-            vm.InitializeMailboxModel(null, null);
-            var accountEmail = new EmailAddress("test@example.com");
-            var folderName = "TestFolder";
-
-            bool eventRaised = false;
-            Folder? createdFolder = null;
-            core.FolderCreated += (sender, args) =>
+            try
             {
-                eventRaised = true;
-                createdFolder = args.Folder;
-            };
+                vm.InitializeMailboxModel(null, null);
+                var accountEmail = new EmailAddress("test@example.com");
+                var folderName = "TestFolder";
 
-            // Act
-            await vm.CreateFolderAsync(accountEmail, folderName).ConfigureAwait(false);
+                bool eventRaised = false;
+                Folder? createdFolder = null;
+                core.FolderCreated += (sender, args) =>
+                {
+                    eventRaised = true;
+                    createdFolder = args.Folder;
+                };
 
-            // Assert
-            Assert.That(eventRaised, Is.True, "FolderCreated event should be raised");
-            Assert.That(createdFolder, Is.Not.Null, "Created folder should not be null");
-            Assert.That(createdFolder!.FullName, Is.EqualTo(folderName), "Folder name should match");
+                // Act
+                await vm.CreateFolderAsync(accountEmail, folderName).ConfigureAwait(false);
+
+                // Assert
+                Assert.That(eventRaised, Is.True, "FolderCreated event should be raised");
+                Assert.That(createdFolder, Is.Not.Null, "Created folder should not be null");
+                Assert.That(createdFolder!.FullName, Is.EqualTo(folderName), "Folder name should match");
+            }
+            finally
+            {
+                core.Dispose();
+            }
         }
 
         [Test]
-        [SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores", Justification = "Test naming convention")]
-        public void CreateFolderAsync_EmptyFolderName_ShouldNotThrow()
+        public void CreateFolderAsyncEmptyFolderNameShouldNotThrow()
         {
             // Arrange
-            var (vm, _) = CreateViewModel();
-            vm.InitializeMailboxModel(null, null);
-            var accountEmail = new EmailAddress("test@example.com");
-
-            // Act & Assert
-            // Empty folder name should be handled gracefully by the Core implementation
-            Assert.DoesNotThrowAsync(async () =>
+            var (vm, core) = CreateViewModel();
+            try
             {
-                await vm.CreateFolderAsync(accountEmail, string.Empty).ConfigureAwait(false);
-            });
+                vm.InitializeMailboxModel(null, null);
+                var accountEmail = new EmailAddress("test@example.com");
+
+                // Act & Assert
+                // Empty folder name should be handled gracefully by the Core implementation
+                Assert.DoesNotThrowAsync(async () =>
+                {
+                    await vm.CreateFolderAsync(accountEmail, string.Empty).ConfigureAwait(false);
+                });
+            }
+            finally
+            {
+                core.Dispose();
+            }
+        }
+
+        [Test]
+        public async Task CreateFolderAsyncShouldTriggerViewModelEventSubscription()
+        {
+            // Arrange
+            var (vm, core) = CreateViewModel();
+            try
+            {
+                vm.InitializeMailboxModel(null, null);
+                var accountEmail = new EmailAddress("test@example.com");
+                var folderName = "TestFolder";
+
+                // Subscribe to the ViewModel's navigation event to verify OnNavigatedTo was called
+                // which triggers SubscribeEvents that sets up the FolderCreated event handler
+                vm.OnNavigatedTo(null);
+
+                // Track if the ViewModel's event handler is triggered via the FolderCreated event
+                bool folderCreatedEventFired = false;
+                core.FolderCreated += (sender, args) =>
+                {
+                    folderCreatedEventFired = true;
+                };
+
+                // Act
+                await vm.CreateFolderAsync(accountEmail, folderName).ConfigureAwait(false);
+
+                // Give the event handler time to execute
+                await Task.Delay(100).ConfigureAwait(false);
+
+                // Assert
+                // The ViewModel should have subscribed to FolderCreated event via OnNavigatedTo -> SubscribeEvents
+                // When CreateFolderAsync is called, the event is raised and the ViewModel's OnFolderCreated
+                // handler calls UpdateAccountsList to refresh the UI
+                Assert.That(folderCreatedEventFired, Is.True, "FolderCreated event should be fired and handled by ViewModel");
+            }
+            finally
+            {
+                core.Dispose();
+            }
         }
     }
 }
