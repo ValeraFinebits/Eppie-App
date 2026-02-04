@@ -80,7 +80,6 @@ namespace Eppie.App.ViewModels.Tests
                 var accountEmail = new EmailAddress("test@example.com");
 
                 // Act & Assert
-                // Empty folder name should be handled gracefully by the Core implementation
                 Assert.DoesNotThrowAsync(async () =>
                 {
                     await vm.CreateFolderAsync(accountEmail, string.Empty).ConfigureAwait(false);
