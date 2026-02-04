@@ -62,7 +62,7 @@ namespace Eppie.App.ViewModels.Tests
 
         [Test]
         [SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores", Justification = "Test naming convention")]
-        public void CreateFolderAsync_NullFolderName_ShouldNotThrow()
+        public void CreateFolderAsync_ValidFolderName_ShouldNotThrow()
         {
             // Arrange
             var vm = CreateViewModel();

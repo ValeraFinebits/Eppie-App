@@ -891,7 +891,6 @@ namespace Tuvi.App.ViewModels
         public async Task CreateFolderAsync(EmailAddress accountEmail, string folderName)
         {
             await Core.CreateFolderAsync(accountEmail, folderName).ConfigureAwait(true);
-            await UpdateAccountListAsync().ConfigureAwait(true);
         }
 
         private void LogEnabledWarning()
