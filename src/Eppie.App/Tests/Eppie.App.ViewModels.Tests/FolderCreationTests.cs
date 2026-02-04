@@ -98,7 +98,6 @@ namespace Eppie.App.ViewModels.Tests
                 var accountEmail = new EmailAddress("test@example.com");
                 var folderName = "TestFolder";
 
-                // which triggers SubscribeEvents that sets up the FolderCreated event handler
                 vm.OnNavigatedTo(null);
 
                 // Track if the ViewModel's event handler is triggered via the FolderCreated event
