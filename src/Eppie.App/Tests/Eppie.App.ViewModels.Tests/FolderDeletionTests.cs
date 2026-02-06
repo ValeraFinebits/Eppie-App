@@ -19,6 +19,7 @@
 using Eppie.App.ViewModels.Tests.TestDoubles;
 using NUnit.Framework;
 using Tuvi.App.ViewModels;
+using Tuvi.Core;
 using Tuvi.Core.Entities;
 
 namespace Eppie.App.ViewModels.Tests
@@ -49,7 +50,7 @@ namespace Eppie.App.ViewModels.Tests
             {
                 vm.InitializeMailboxModel(null, null);
                 var accountEmail = new EmailAddress("test@example.com");
-                var folder = new Folder { FullName = "TestFolder" };
+                var folder = new CompositeFolder(new Folder { FullName = "TestFolder" });
 
                 bool eventRaised = false;
                 Folder? deletedFolder = null;
@@ -78,21 +79,23 @@ namespace Eppie.App.ViewModels.Tests
             {
                 vm.InitializeMailboxModel(null, null);
                 var accountEmail = new EmailAddress("test@example.com");
-                var folder = new Folder { FullName = "TestFolder" };
+                var folder = new CompositeFolder(new Folder { FullName = "TestFolder" });
 
+                // Subscribe to the ViewModel to track if OnNavigatedTo was called
                 vm.OnNavigatedTo(null);
 
-                bool folderDeletedEventFired = false;
-                core.FolderDeleted += (sender, args) =>
-                {
-                    folderDeletedEventFired = true;
-                };
+                int getCompositeAccountsCallsBefore = core.GetCompositeAccountsCalls;
 
                 // Act
                 await vm.DeleteFolderAsync(accountEmail, folder).ConfigureAwait(false);
+                
+                // Give the async event handler time to complete
+                await Task.Delay(100);
 
-                // Assert
-                Assert.That(folderDeletedEventFired, Is.True, "FolderDeleted event should be fired and handled by ViewModel");
+                // Assert - verify that the ViewModel's event handler triggered UpdateAccountsList
+                // which should call GetCompositeAccountsAsync
+                Assert.That(core.GetCompositeAccountsCalls, Is.GreaterThan(getCompositeAccountsCallsBefore), 
+                    "ViewModel should call GetCompositeAccountsAsync when FolderDeleted event is raised");
             }
         }
 
@@ -106,7 +109,7 @@ namespace Eppie.App.ViewModels.Tests
                 vm.InitializeMailboxModel(null, null);
                 var accountEmail = new EmailAddress("test@example.com");
 
-                // Act & Assert
+                // Act & Assert - null is now handled gracefully by short-circuiting
                 Assert.DoesNotThrowAsync(async () =>
                 {
                     await vm.DeleteFolderAsync(accountEmail, null!).ConfigureAwait(false);

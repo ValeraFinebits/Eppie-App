@@ -900,8 +900,13 @@ namespace Tuvi.App.ViewModels
             await Core.CreateFolderAsync(accountEmail, folderName).ConfigureAwait(true);
         }
 
-        public async Task DeleteFolderAsync(EmailAddress accountEmail, Folder folder)
+        public async Task DeleteFolderAsync(EmailAddress accountEmail, CompositeFolder folder)
         {
+            if (folder is null)
+            {
+                return;
+            }
+
             await Core.DeleteFolderAsync(accountEmail, folder).ConfigureAwait(true);
         }
 
