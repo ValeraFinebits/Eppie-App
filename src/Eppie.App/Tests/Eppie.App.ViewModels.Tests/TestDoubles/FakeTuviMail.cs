@@ -253,8 +253,13 @@ namespace Eppie.App.ViewModels.Tests.TestDoubles
 
         public Task DeleteFolderAsync(EmailAddress accountEmail, CompositeFolder folder, CancellationToken cancellationToken = default)
         {
+            if (folder is null)
+            {
+                return Task.CompletedTask;
+            }
+
             // CompositeFolder contains the base Folder, so we can pass it to the event
-            var baseFolder = new Folder { FullName = folder?.FullName ?? string.Empty };
+            var baseFolder = new Folder { FullName = folder.FullName };
             FolderDeleted?.Invoke(this, new FolderDeletedEventArgs(baseFolder, accountEmail));
             return Task.CompletedTask;
         }
