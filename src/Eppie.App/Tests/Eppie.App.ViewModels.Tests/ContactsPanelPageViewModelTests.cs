@@ -24,6 +24,7 @@ using NUnit.Framework;
 using Tuvi.App.ViewModels;
 using Tuvi.App.ViewModels.Common;
 using Tuvi.App.ViewModels.Messages;
+using Tuvi.App.ViewModels.Services;
 using Tuvi.Core.Entities;
 
 namespace Eppie.App.ViewModels.Tests
@@ -760,7 +761,7 @@ namespace Eppie.App.ViewModels.Tests
                 var contactItem = new ContactItem(contact);
 
                 // Act
-                ((RelayCommand<(ContactItem, Services.IClipboardProvider)>)vm.CopyContactAddressCommand).Execute((contactItem, clipboard));
+                ((RelayCommand<(ContactItem, IClipboardProvider)>)vm.CopyContactAddressCommand).Execute((contactItem, clipboard));
 
                 // Assert
                 Assert.That(clipboard.LastSetContent, Is.EqualTo("John Doe <test@example.com>"));
@@ -779,7 +780,7 @@ namespace Eppie.App.ViewModels.Tests
                 var contactItem = new ContactItem(contact);
 
                 // Act
-                ((RelayCommand<(ContactItem, Services.IClipboardProvider)>)vm.CopyContactAddressCommand).Execute((contactItem, clipboard));
+                ((RelayCommand<(ContactItem, IClipboardProvider)>)vm.CopyContactAddressCommand).Execute((contactItem, clipboard));
 
                 // Assert
                 Assert.That(clipboard.LastSetContent, Is.EqualTo("test@example.com"));
@@ -798,7 +799,7 @@ namespace Eppie.App.ViewModels.Tests
                 var contactItem = new ContactItem(contact);
 
                 // Act
-                ((RelayCommand<(ContactItem, Services.IClipboardProvider)>)vm.CopyContactAddressCommand).Execute((contactItem, clipboard));
+                ((RelayCommand<(ContactItem, IClipboardProvider)>)vm.CopyContactAddressCommand).Execute((contactItem, clipboard));
 
                 // Assert
                 Assert.That(clipboard.LastSetContent, Is.EqualTo("test@example.com"));
@@ -820,7 +821,7 @@ namespace Eppie.App.ViewModels.Tests
                 };
 
                 // Act
-                ((RelayCommand<(ContactItem, Services.IClipboardProvider)>)vm.CopyContactAddressCommand).Execute((contactItem, clipboard));
+                ((RelayCommand<(ContactItem, IClipboardProvider)>)vm.CopyContactAddressCommand).Execute((contactItem, clipboard));
 
                 // Assert
                 Assert.That(errors.Errors, Has.Count.EqualTo(1));
@@ -839,9 +840,10 @@ namespace Eppie.App.ViewModels.Tests
             using (vm)
             {
                 var contactItem = new ContactItem(contact);
+                var param = (contactItem, (IClipboardProvider)null!);
 
                 // Act
-                ((RelayCommand<(ContactItem, Services.IClipboardProvider)>)vm.CopyContactAddressCommand).Execute((contactItem, (Services.IClipboardProvider)null));
+                ((RelayCommand<(ContactItem, IClipboardProvider)>)vm.CopyContactAddressCommand).Execute(param);
 
                 // Assert
                 Assert.That(errors.Errors, Has.Count.EqualTo(1));
@@ -851,16 +853,17 @@ namespace Eppie.App.ViewModels.Tests
         }
 
         [Test]
-        public void CopyContactAddressCommand_WithNullContactItem_ThrowsArgumentNullException()
+        public void CopyContactAddressCommandWithNullContactItemThrowsArgumentNullException()
         {
             // Arrange
             var (vm, _, _, _, _) = CreateVm();
             using (vm)
             {
                 var clipboard = new TestClipboardProvider();
+                var param = ((ContactItem)null!, clipboard);
 
                 // Act & Assert
-                Assert.Throws<ArgumentNullException>(() => ((RelayCommand<(ContactItem, Services.IClipboardProvider)>)vm.CopyContactAddressCommand).Execute((null, clipboard)));
+                Assert.Throws<ArgumentNullException>(() => ((RelayCommand<(ContactItem, IClipboardProvider)>)vm.CopyContactAddressCommand).Execute(param));
             }
         }
     }

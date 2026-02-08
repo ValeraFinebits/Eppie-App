@@ -220,7 +220,7 @@ namespace Tuvi.App.ViewModels
 
             if (contactItem is null)
             {
-                throw new ArgumentNullException(nameof(contactItem));
+                throw new ArgumentNullException(nameof(commandParameters));
             }
 
             try
