@@ -54,6 +54,7 @@
                                                 ComposeEmailCommand="{x:Bind ViewModel.ComposeEmailCommand, Mode=OneWay}"
                                                 ContactClickCommand="{x:Bind ViewModel.ContactClickCommand, Mode=OneWay}"
                                                 Contacts="{x:Bind ViewModel.Contacts, Mode=OneWay}"
+                                                CopyContactAddressCommand="{x:Bind ViewModel.CopyContactAddressCommand, Mode=OneWay}"
                                                 InviteContactCommand="{x:Bind ViewModel.InviteContactCommand, Mode=OneWay}"
                                                 RemoveContactCommand="{x:Bind ViewModel.RemoveContactCommand, Mode=OneWay}"
                                                 RenameContactCommand="{x:Bind ViewModel.RenameContactCommand, Mode=OneWay}"

@@ -60,6 +60,7 @@ namespace Tuvi.App.ViewModels
         public ICommand RemoveContactCommand => new AsyncRelayCommand<ContactItem>(RemoveContactAsync);
         public ICommand InviteContactCommand => new AsyncRelayCommand<ContactItem>(InviteContactAsync);
         public ICommand ComposeEmailCommand => new AsyncRelayCommand<ContactItem>(ComposeEmailToContactAsync);
+        public ICommand CopyContactAddressCommand => new RelayCommand<(ContactItem, Services.IClipboardProvider)>(CopyContactAddress);
 
         private ContactItem _selectedContact;
         public ContactItem SelectedContact
@@ -206,6 +207,31 @@ namespace Tuvi.App.ViewModels
 
                 var messageData = new SelectedContactNewMessageData(fromEmail, contactItem.Email);
                 NavigationService?.Navigate(nameof(NewMessagePageViewModel), messageData);
+            }
+            catch (Exception ex)
+            {
+                OnError(ex);
+            }
+        }
+
+        private void CopyContactAddress((ContactItem contactItem, Services.IClipboardProvider clipboard) parameters)
+        {
+            var (contactItem, clipboard) = parameters;
+
+            if (contactItem is null)
+            {
+                throw new ArgumentNullException(nameof(contactItem));
+            }
+
+            if (clipboard is null)
+            {
+                throw new ArgumentNullException(nameof(clipboard));
+            }
+
+            try
+            {
+                string formattedAddress = contactItem.GetFormattedAddress();
+                clipboard.SetClipboardContent(formattedAddress);
             }
             catch (Exception ex)
             {
