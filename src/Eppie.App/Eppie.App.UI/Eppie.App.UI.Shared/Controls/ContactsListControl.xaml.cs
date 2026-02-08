@@ -185,12 +185,9 @@ namespace Eppie.App.UI.Controls
 
         private void CopyContactAddressMenuItemClick(object sender, RoutedEventArgs args)
         {
-            if (sender is FrameworkElement frameworkElement && frameworkElement.Tag is ContactItem contactItem)
+            if (sender is FrameworkElement frameworkElement && frameworkElement.Tag is ContactItem contactItem && ClipboardProvider != null)
             {
-                if (ClipboardProvider != null)
-                {
-                    CopyContactAddressCommand?.Execute((contactItem, ClipboardProvider));
-                }
+                CopyContactAddressCommand?.Execute((contactItem, ClipboardProvider));
             }
         }
     }

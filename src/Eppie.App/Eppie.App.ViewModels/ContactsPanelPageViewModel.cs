@@ -218,19 +218,27 @@ namespace Tuvi.App.ViewModels
         {
             var (contactItem, clipboard) = commandParameters;
 
-            if (contactItem is null)
-            {
-                throw new ArgumentNullException(nameof(contactItem));
-            }
-
-            if (clipboard is null)
-            {
-                throw new ArgumentNullException(nameof(clipboard));
-            }
-
             try
             {
+                if (contactItem is null)
+                {
+                    throw new ArgumentNullException(nameof(commandParameters), "Contact item cannot be null.");
+                }
+
+                if (clipboard is null)
+                {
+                    OnError(new InvalidOperationException("Clipboard provider is not available."));
+                    return;
+                }
+
                 string formattedAddress = contactItem.GetFormattedAddress();
+
+                if (string.IsNullOrEmpty(formattedAddress))
+                {
+                    OnError(new InvalidOperationException("Selected contact does not have an email address."));
+                    return;
+                }
+
                 clipboard.SetClipboardContent(formattedAddress);
             }
             catch (Exception ex)

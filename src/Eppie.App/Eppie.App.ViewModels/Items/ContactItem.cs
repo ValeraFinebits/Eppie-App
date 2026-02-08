@@ -142,17 +142,17 @@ namespace Tuvi.App.ViewModels
         public string GetFormattedAddress()
         {
             string emailAddress = Email?.Address;
-            
+
             if (string.IsNullOrEmpty(emailAddress))
             {
                 return string.Empty;
             }
-            
-            if (string.IsNullOrEmpty(FullName))
+
+            if (string.IsNullOrWhiteSpace(FullName))
             {
                 return emailAddress;
             }
-            
+
             return $"{FullName} <{emailAddress}>";
         }
     }
