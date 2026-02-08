@@ -754,14 +754,17 @@ namespace Eppie.App.ViewModels.Tests
             // Arrange
             var contact = CreateContact("test@example.com", "John Doe");
             var (vm, _, _, _, _) = CreateVm(new[] { contact });
-            var clipboard = new TestClipboardProvider();
-            var contactItem = new ContactItem(contact);
+            using (vm)
+            {
+                var clipboard = new TestClipboardProvider();
+                var contactItem = new ContactItem(contact);
 
-            // Act
-            vm.CopyContactAddressCommand.Execute((contactItem, clipboard));
+                // Act
+                ((RelayCommand<(ContactItem, Services.IClipboardProvider)>)vm.CopyContactAddressCommand).Execute((contactItem, clipboard));
 
-            // Assert
-            Assert.That(clipboard.LastSetContent, Is.EqualTo("John Doe <test@example.com>"));
+                // Assert
+                Assert.That(clipboard.LastSetContent, Is.EqualTo("John Doe <test@example.com>"));
+            }
         }
 
         [Test]
@@ -770,14 +773,17 @@ namespace Eppie.App.ViewModels.Tests
             // Arrange
             var contact = CreateContact("test@example.com", "");
             var (vm, _, _, _, _) = CreateVm(new[] { contact });
-            var clipboard = new TestClipboardProvider();
-            var contactItem = new ContactItem(contact);
+            using (vm)
+            {
+                var clipboard = new TestClipboardProvider();
+                var contactItem = new ContactItem(contact);
 
-            // Act
-            vm.CopyContactAddressCommand.Execute((contactItem, clipboard));
+                // Act
+                ((RelayCommand<(ContactItem, Services.IClipboardProvider)>)vm.CopyContactAddressCommand).Execute((contactItem, clipboard));
 
-            // Assert
-            Assert.That(clipboard.LastSetContent, Is.EqualTo("test@example.com"));
+                // Assert
+                Assert.That(clipboard.LastSetContent, Is.EqualTo("test@example.com"));
+            }
         }
 
         [Test]
@@ -786,14 +792,17 @@ namespace Eppie.App.ViewModels.Tests
             // Arrange
             var contact = CreateContact("test@example.com", "   ");
             var (vm, _, _, _, _) = CreateVm(new[] { contact });
-            var clipboard = new TestClipboardProvider();
-            var contactItem = new ContactItem(contact);
+            using (vm)
+            {
+                var clipboard = new TestClipboardProvider();
+                var contactItem = new ContactItem(contact);
 
-            // Act
-            vm.CopyContactAddressCommand.Execute((contactItem, clipboard));
+                // Act
+                ((RelayCommand<(ContactItem, Services.IClipboardProvider)>)vm.CopyContactAddressCommand).Execute((contactItem, clipboard));
 
-            // Assert
-            Assert.That(clipboard.LastSetContent, Is.EqualTo("test@example.com"));
+                // Assert
+                Assert.That(clipboard.LastSetContent, Is.EqualTo("test@example.com"));
+            }
         }
 
         [Test]
@@ -801,21 +810,24 @@ namespace Eppie.App.ViewModels.Tests
         {
             // Arrange
             var (vm, _, _, _, errors) = CreateVm();
-            var clipboard = new TestClipboardProvider();
-            var contactItem = new ContactItem
+            using (vm)
             {
-                Email = null,
-                FullName = "John Doe"
-            };
+                var clipboard = new TestClipboardProvider();
+                var contactItem = new ContactItem
+                {
+                    Email = null,
+                    FullName = "John Doe"
+                };
 
-            // Act
-            vm.CopyContactAddressCommand.Execute((contactItem, clipboard));
+                // Act
+                ((RelayCommand<(ContactItem, Services.IClipboardProvider)>)vm.CopyContactAddressCommand).Execute((contactItem, clipboard));
 
-            // Assert
-            Assert.That(errors.Errors, Has.Count.EqualTo(1));
-            Assert.That(errors.Errors[0], Is.TypeOf<InvalidOperationException>());
-            Assert.That(errors.Errors[0].Message, Does.Contain("does not have an email address"));
-            Assert.That(clipboard.LastSetContent, Is.Null);
+                // Assert
+                Assert.That(errors.Errors, Has.Count.EqualTo(1));
+                Assert.That(errors.Errors[0], Is.TypeOf<InvalidOperationException>());
+                Assert.That(errors.Errors[0].Message, Does.Contain("does not have an email address"));
+                Assert.That(clipboard.LastSetContent, Is.Null);
+            }
         }
 
         [Test]
@@ -824,15 +836,18 @@ namespace Eppie.App.ViewModels.Tests
             // Arrange
             var contact = CreateContact("test@example.com", "John Doe");
             var (vm, _, _, _, errors) = CreateVm(new[] { contact });
-            var contactItem = new ContactItem(contact);
+            using (vm)
+            {
+                var contactItem = new ContactItem(contact);
 
-            // Act
-            vm.CopyContactAddressCommand.Execute((contactItem, null));
+                // Act
+                ((RelayCommand<(ContactItem, Services.IClipboardProvider)>)vm.CopyContactAddressCommand).Execute((contactItem, (Services.IClipboardProvider)null));
 
-            // Assert
-            Assert.That(errors.Errors, Has.Count.EqualTo(1));
-            Assert.That(errors.Errors[0], Is.TypeOf<InvalidOperationException>());
-            Assert.That(errors.Errors[0].Message, Does.Contain("Clipboard provider is not available"));
+                // Assert
+                Assert.That(errors.Errors, Has.Count.EqualTo(1));
+                Assert.That(errors.Errors[0], Is.TypeOf<InvalidOperationException>());
+                Assert.That(errors.Errors[0].Message, Does.Contain("Clipboard provider is not available"));
+            }
         }
 
         [Test]
@@ -840,10 +855,13 @@ namespace Eppie.App.ViewModels.Tests
         {
             // Arrange
             var (vm, _, _, _, _) = CreateVm();
-            var clipboard = new TestClipboardProvider();
+            using (vm)
+            {
+                var clipboard = new TestClipboardProvider();
 
-            // Act & Assert
-            Assert.Throws<ArgumentNullException>(() => vm.CopyContactAddressCommand.Execute((null, clipboard)));
+                // Act & Assert
+                Assert.Throws<ArgumentNullException>(() => ((RelayCommand<(ContactItem, Services.IClipboardProvider)>)vm.CopyContactAddressCommand).Execute((null, clipboard)));
+            }
         }
     }
 }
