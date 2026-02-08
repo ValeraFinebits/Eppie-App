@@ -118,6 +118,15 @@ namespace Eppie.App.UI.Controls
         public static readonly DependencyProperty CopyContactAddressCommandProperty =
             DependencyProperty.Register(nameof(CopyContactAddressCommand), typeof(ICommand), typeof(ContactsListControl), new PropertyMetadata(null));
 
+        public Tuvi.App.ViewModels.Services.IClipboardProvider ClipboardProvider
+        {
+            get { return (Tuvi.App.ViewModels.Services.IClipboardProvider)GetValue(ClipboardProviderProperty); }
+            set { SetValue(ClipboardProviderProperty, value); }
+        }
+
+        public static readonly DependencyProperty ClipboardProviderProperty =
+            DependencyProperty.Register(nameof(ClipboardProvider), typeof(Tuvi.App.ViewModels.Services.IClipboardProvider), typeof(ContactsListControl), new PropertyMetadata(null));
+
         public ContactsListControl()
         {
             this.InitializeComponent();
@@ -178,8 +187,10 @@ namespace Eppie.App.UI.Controls
         {
             if (sender is FrameworkElement frameworkElement && frameworkElement.Tag is ContactItem contactItem)
             {
-                var clipboardProvider = (Tuvi.App.ViewModels.Services.IClipboardProvider)Application.Current.Resources["ClipboardProvider"];
-                CopyContactAddressCommand?.Execute((contactItem, clipboardProvider));
+                if (ClipboardProvider != null)
+                {
+                    CopyContactAddressCommand?.Execute((contactItem, ClipboardProvider));
+                }
             }
         }
     }

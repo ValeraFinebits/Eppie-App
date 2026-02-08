@@ -214,9 +214,9 @@ namespace Tuvi.App.ViewModels
             }
         }
 
-        private void CopyContactAddress((ContactItem contactItem, Services.IClipboardProvider clipboard) parameters)
+        private void CopyContactAddress((ContactItem contactItem, Services.IClipboardProvider clipboard) commandParameters)
         {
-            var (contactItem, clipboard) = parameters;
+            var (contactItem, clipboard) = commandParameters;
 
             if (contactItem is null)
             {
