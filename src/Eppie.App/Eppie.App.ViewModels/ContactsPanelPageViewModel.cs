@@ -218,13 +218,13 @@ namespace Tuvi.App.ViewModels
         {
             var (contactItem, clipboard) = commandParameters;
 
+            if (contactItem is null)
+            {
+                throw new ArgumentNullException(nameof(contactItem));
+            }
+
             try
             {
-                if (contactItem is null)
-                {
-                    throw new ArgumentNullException(nameof(commandParameters), "Contact item cannot be null.");
-                }
-
                 if (clipboard is null)
                 {
                     OnError(new InvalidOperationException("Clipboard provider is not available."));
