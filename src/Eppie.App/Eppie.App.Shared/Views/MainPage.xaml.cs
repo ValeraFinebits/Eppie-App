@@ -404,22 +404,6 @@ namespace Eppie.App.Views
                     {
                         try
                         {
-                            // Check if a folder with the new name already exists in the same account
-                            var rootItem = ViewModel.MailBoxesModel.GetRootItemByEmail(mailBoxItem.Email);
-                            if (rootItem != null)
-                            {
-                                var duplicateFolder = rootItem.Children.FirstOrDefault(f => 
-                                    f.Text.Equals(newFolderName, StringComparison.OrdinalIgnoreCase) && 
-                                    !string.Equals(f.Folder.FullName, mailBoxItem.Folder.FullName, StringComparison.OrdinalIgnoreCase));
-                                
-                                if (duplicateFolder != null)
-                                {
-                                    OnError(new InvalidOperationException(
-                                        stringProvider.GetString("FolderAlreadyExistsError")));
-                                    return;
-                                }
-                            }
-
                             // For now, only support simple folders renaming
                             if (mailBoxItem.Folder.Folders.Count == 1)
                             {
