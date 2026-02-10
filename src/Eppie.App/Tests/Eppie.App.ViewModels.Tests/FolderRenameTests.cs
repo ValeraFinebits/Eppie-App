@@ -55,12 +55,12 @@ namespace Eppie.App.ViewModels.Tests
 
                 bool eventRaised = false;
                 Folder? renamedFolder = null;
-                string? oldName = null;
+                string? oldFullName = null;
                 core.FolderRenamed += (sender, args) =>
                 {
                     eventRaised = true;
                     renamedFolder = args.Folder;
-                    oldName = args.OldName;
+                    oldFullName = args.OldFullName;
                 };
 
                 // Act
@@ -70,7 +70,7 @@ namespace Eppie.App.ViewModels.Tests
                 Assert.That(eventRaised, Is.True, "FolderRenamed event should be raised");
                 Assert.That(renamedFolder, Is.Not.Null, "Renamed folder should not be null");
                 Assert.That(renamedFolder!.FullName, Is.EqualTo(newName), "Folder name should be updated");
-                Assert.That(oldName, Is.EqualTo("OldFolderName"), "Old name should be preserved in event args");
+                Assert.That(oldFullName, Is.EqualTo("OldFolderName"), "Old name should be preserved in event args");
             }
         }
 
