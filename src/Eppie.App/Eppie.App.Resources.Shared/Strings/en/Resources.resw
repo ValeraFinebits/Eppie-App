@@ -1720,8 +1720,4 @@ Eppie
     <value>Enter new folder name</value>
     <comment>The textbox header for the rename folder dialog</comment>
   </data>
-  <data name="FolderAlreadyExistsError" xml:space="preserve">
-    <value>A folder with this name already exists</value>
-    <comment>Error message shown when user tries to rename a folder to a name that already exists</comment>
-  </data>
 </root>
