@@ -410,7 +410,7 @@ namespace Eppie.App.Views
                             {
                                 var duplicateFolder = rootItem.Children.FirstOrDefault(f => 
                                     f.Text.Equals(newFolderName, StringComparison.OrdinalIgnoreCase) && 
-                                    f.Folder != mailBoxItem.Folder);
+                                    !string.Equals(f.Folder.FullName, mailBoxItem.Folder.FullName, StringComparison.OrdinalIgnoreCase));
                                 
                                 if (duplicateFolder != null)
                                 {
