@@ -421,10 +421,14 @@ namespace Eppie.App.Views
                             }
 
                             // Get the actual folder from the Folder.Folders list (this is the underlying Folder object)
-                            var folderToRename = mailBoxItem.Folder.Folders.FirstOrDefault();
-                            if (folderToRename != null)
+                            // For now, only support simple folders renaming (same as deletion)
+                            if (mailBoxItem.Folder.Folders.Count == 1)
                             {
-                                await ViewModel.RenameFolderAsync(mailBoxItem.Email, folderToRename, newFolderName).ConfigureAwait(true);
+                                await ViewModel.RenameFolderAsync(mailBoxItem.Email, mailBoxItem.Folder.Folders[0], newFolderName).ConfigureAwait(true);
+                            }
+                            else
+                            {
+                                throw new NotImplementedException("Only simple folders renaming is supported.");
                             }
                         }
                         catch (Exception ex)
