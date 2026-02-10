@@ -420,7 +420,6 @@ namespace Eppie.App.Views
                                 }
                             }
 
-                            // Get the actual folder from the Folder.Folders list (this is the underlying Folder object)
                             // For now, only support simple folders renaming (same as deletion)
                             if (mailBoxItem.Folder.Folders.Count == 1)
                             {
