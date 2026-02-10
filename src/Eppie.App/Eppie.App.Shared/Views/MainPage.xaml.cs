@@ -398,11 +398,39 @@ namespace Eppie.App.Views
                 stringProvider.GetString("RenameFolderDialogTextBoxHeader"),
                 mailBoxItem.Text,
                 this.XamlRoot,
-                (newFolderName) =>
+                async (newFolderName) =>
                 {
                     if (!string.IsNullOrWhiteSpace(newFolderName) && newFolderName != mailBoxItem.Text)
                     {
-                        throw new NotImplementedException();
+                        try
+                        {
+                            // Check if a folder with the new name already exists in the same account
+                            var rootItem = ViewModel.MailBoxesModel.GetRootItemByEmail(mailBoxItem.Email);
+                            if (rootItem != null)
+                            {
+                                var duplicateFolder = rootItem.Children.FirstOrDefault(f => 
+                                    f.Text.Equals(newFolderName, StringComparison.OrdinalIgnoreCase) && 
+                                    f.Folder != mailBoxItem.Folder);
+                                
+                                if (duplicateFolder != null)
+                                {
+                                    OnError(new InvalidOperationException(
+                                        stringProvider.GetString("FolderAlreadyExistsError")));
+                                    return;
+                                }
+                            }
+
+                            // Get the actual folder from the Folder.Folders list (this is the underlying Folder object)
+                            var folderToRename = mailBoxItem.Folder.Folders.FirstOrDefault();
+                            if (folderToRename != null)
+                            {
+                                await ViewModel.RenameFolderAsync(mailBoxItem.Email, folderToRename, newFolderName).ConfigureAwait(true);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            OnError(ex);
+                        }
                     }
                 });
         }
