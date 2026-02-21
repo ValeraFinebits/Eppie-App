@@ -432,7 +432,7 @@ namespace Tuvi.App.ViewModels
         {
             get
             {
-                return new AsyncRelayCommand(WriteNewMessageAsync);
+                return new AsyncRelayCommand(() => WriteNewMessageAsync(null));
             }
         }
 
@@ -452,7 +452,7 @@ namespace Tuvi.App.ViewModels
             }
         }
 
-        private async Task WriteNewMessageAsync()
+        public async Task WriteNewMessageAsync(Action<object> navigateContentFrameAction)
         {
             try
             {
@@ -475,7 +475,14 @@ namespace Tuvi.App.ViewModels
                         messageData = new SelectedAccountNewMessageData(MailBoxesModel.SelectedItem.Email);
                     }
 
-                    NavigationService?.Navigate(nameof(NewMessagePageViewModel), messageData);
+                    if (navigateContentFrameAction is null)
+                    {
+                        NavigationService?.Navigate(nameof(NewMessagePageViewModel), messageData);
+                    }
+                    else
+                    {
+                        navigateContentFrameAction?.Invoke(messageData);
+                    }
                 }
                 else
                 {
@@ -708,6 +715,7 @@ namespace Tuvi.App.ViewModels
             Core.AccountDeleted += OnAccountDeleted;
             Core.FolderCreated += OnFolderCreated;
             Core.FolderDeleted += OnFolderDeleted;
+            Core.FolderRenamed += OnFolderRenamed;
 
             LocalSettingsService.SettingChanged += LocalSettingsService_SettingChanged;
 
@@ -728,6 +736,7 @@ namespace Tuvi.App.ViewModels
             Core.AccountDeleted -= OnAccountDeleted;
             Core.FolderCreated -= OnFolderCreated;
             Core.FolderDeleted -= OnFolderDeleted;
+            Core.FolderRenamed -= OnFolderRenamed;
 
             LocalSettingsService.SettingChanged -= LocalSettingsService_SettingChanged;
 
@@ -838,6 +847,11 @@ namespace Tuvi.App.ViewModels
         }
 
         private void OnFolderDeleted(object sender, FolderDeletedEventArgs e)
+        {
+            UpdateAccountsList();
+        }
+
+        private void OnFolderRenamed(object sender, FolderRenamedEventArgs e)
         {
             UpdateAccountsList();
         }
@@ -969,6 +983,11 @@ namespace Tuvi.App.ViewModels
         public async Task DeleteFolderAsync(EmailAddress accountEmail, Folder folder)
         {
             await Core.DeleteFolderAsync(accountEmail, folder).ConfigureAwait(true);
+        }
+
+        public async Task RenameFolderAsync(EmailAddress accountEmail, Folder folder, string newName)
+        {
+            await Core.RenameFolderAsync(accountEmail, folder, newName).ConfigureAwait(true);
         }
 
         private void LogEnabledWarning()

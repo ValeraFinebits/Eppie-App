@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
@@ -35,6 +36,12 @@ namespace Tuvi.App.ViewModels
     public class RemovableAttachment : DownloadableAttachment
     {
         public ICommand RemoveCommand { get; set; }
+
+        // ToDo: this needs to be implemented
+        public string FileSize { get; set; }
+
+        // ToDo: this needs to be implemented
+        public ImageInfo FileThumbnail { get; set; }
     }
 
     public static class RemovableAttachmentConvertor
@@ -120,6 +127,8 @@ namespace Tuvi.App.ViewModels
 
     public class NewMessagePageViewModel : BaseMessageViewModel
     {
+        // ToDo: SenderAddressIndex should be used
+
         private EmailAddress _from;
         public EmailAddress From
         {
@@ -129,6 +138,21 @@ namespace Tuvi.App.ViewModels
                 if (_from != value)
                 {
                     SetProperty(ref _from, value);
+                    OnFromUpdated();
+                }
+            }
+        }
+
+        public ObservableCollection<AddressItem> SenderAddresses { get; } = new ObservableCollection<AddressItem>();
+
+        private int _senderAddressIndex;
+        public int SenderAddressIndex
+        {
+            get { return _senderAddressIndex; }
+            set
+            {
+                if (SetProperty(ref _senderAddressIndex, value))
+                {
                     OnFromUpdated();
                 }
             }
@@ -245,6 +269,7 @@ namespace Tuvi.App.ViewModels
 
         public bool HasAttachments => Attachments.Any();
 
+        // ToDo: SenderAddresses should be used
         public ObservableCollection<EmailAddress> FromList { get; } = new ObservableCollection<EmailAddress>();
 
         private bool _loadingContent;
@@ -351,6 +376,9 @@ namespace Tuvi.App.ViewModels
                         From = FromList.FirstOrDefault();
                     }
                 }
+
+                // ToDo: remove test code
+                InitFakeSenderAddresses();
 
                 base.OnNavigatedTo(data);
             }
@@ -638,6 +666,32 @@ namespace Tuvi.App.ViewModels
             catch (Exception e)
             {
                 OnError(e);
+            }
+        }
+
+        // ToDo: remove test code
+        private void InitFakeSenderAddresses()
+        {
+            SenderAddresses.Clear();
+
+            SenderAddresses.Add(new AddressItem(CreateFakeAccount("alice@mail.fake", MailBoxType.Email, "alice")));
+            SenderAddresses.Add(new AddressItem(CreateFakeAccount("bob@mail.fake", MailBoxType.Email, "bob")));
+            SenderAddresses.Add(new AddressItem(CreateFakeAccount("eva@mail.fake", MailBoxType.Email)));
+            SenderAddresses.Add(new AddressItem(CreateFakeAccount("huge-huge-huge-huge-huge-email-address@mail.fake", MailBoxType.Email)));
+            SenderAddresses.Add(new AddressItem(CreateFakeAccount("huge-huge-huge-huge-huge-email-address@mail.fake", MailBoxType.Email, "huge-huge-huge-huge-huge-name")));
+            SenderAddresses.Add(new AddressItem(CreateFakeAccount("email-address@mail.fake", MailBoxType.Email, "huge-huge-huge-huge-huge-name")));
+            SenderAddresses.Add(new AddressItem(CreateFakeAccount("email@mail.fake", MailBoxType.Email, "firstname secondname")));
+
+            SenderAddressIndex = -1;
+
+
+            Account CreateFakeAccount(string email, MailBoxType type, string name = null)
+            {
+                return new Account()
+                {
+                    Email = new EmailAddress(email, name),
+                    Type = type
+                };
             }
         }
     }
