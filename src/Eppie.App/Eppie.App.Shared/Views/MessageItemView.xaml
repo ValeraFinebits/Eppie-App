@@ -34,9 +34,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid Margin="0,4"
-          Padding="16,10"
-          BorderThickness="0">
+    <Grid Margin="0,2" Padding="16,6">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="32" />
             <ColumnDefinition Width="Auto" />
@@ -49,38 +47,38 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.RowSpan="2"
-                    Grid.Column="0"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Center"
-                    Orientation="Vertical"
-                    Spacing="8">
-            <Grid Width="24" Height="24">
-                <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}"
-                          FontSize="14"
-                          Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"
-                          Glyph="&#xE715;"
-                          Visibility="{Binding IsMarkedAsRead, Converter={StaticResource InverseBoolToVisibilityConverter}}" />
-                <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}"
-                          FontSize="14"
-                          Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                          Glyph="&#xE8C3;"
-                          Visibility="{Binding IsMarkedAsRead}" />
-            </Grid>
+        <Grid Width="24"
+              Height="24"
+              HorizontalAlignment="Left"
+              VerticalAlignment="Center">
+            <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                      FontSize="14"
+                      Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"
+                      Glyph="&#xE715;"
+                      Visibility="{Binding IsMarkedAsRead, Converter={StaticResource InverseBoolToVisibilityConverter}}" />
+            <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                      FontSize="14"
+                      Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                      Glyph="&#xE8C3;"
+                      Visibility="{Binding IsMarkedAsRead}" />
+        </Grid>
 
-            <Grid Width="24" Height="24">
-                <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}"
-                          FontSize="14"
-                          Foreground="{ThemeResource TextFillColorDisabledBrush}"
-                          Glyph="&#xE81B;"
-                          Visibility="{Binding IsFlagged, Converter={StaticResource InverseBoolToVisibilityConverter}}" />
-                <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}"
-                          FontSize="14"
-                          Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"
-                          Glyph="&#xEB4B;"
-                          Visibility="{Binding IsFlagged}" />
-            </Grid>
-        </StackPanel>
+        <Grid Grid.Row="1"
+              Width="24"
+              Height="24"
+              HorizontalAlignment="Left"
+              VerticalAlignment="Center">
+            <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                      FontSize="14"
+                      Foreground="{ThemeResource TextFillColorDisabledBrush}"
+                      Glyph="&#xE81B;"
+                      Visibility="{Binding IsFlagged, Converter={StaticResource InverseBoolToVisibilityConverter}}" />
+            <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                      FontSize="14"
+                      Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"
+                      Glyph="&#xEB4B;"
+                      Visibility="{Binding IsFlagged}" />
+        </Grid>
 
         <PersonPicture Grid.Column="1"
                        Width="40"
@@ -88,58 +86,63 @@
                        VerticalAlignment="Center"
                        DisplayName="{Binding MessageSender, Mode=OneWay}" />
 
-        <StackPanel Grid.Row="0"
-                    Grid.Column="2"
+        <StackPanel Grid.Column="2"
                     Margin="12,0,0,0"
                     VerticalAlignment="Center">
-            <TextBlock FontSize="16"
-                       Style="{Binding IsMarkedAsRead, Converter={StaticResource InverseBoolToAccentTextBlockStyleConverter}}"
-                       Text="{Binding MessageSender}"
+            <TextBlock Style="{Binding IsMarkedAsRead, Converter={StaticResource InverseBoolToAccentTextBlockStyleConverter}}"
+                       Text="{Binding SenderName}"
                        TextTrimming="CharacterEllipsis"
                        TextWrapping="NoWrap" />
             <TextBlock Margin="0,2,0,0"
-                       FontSize="12"
                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                        Text="{Binding SenderEmail}"
                        TextTrimming="CharacterEllipsis"
                        TextWrapping="NoWrap" />
         </StackPanel>
 
-        <StackPanel Grid.Row="1"
-                    Grid.Column="1"
-                    Grid.ColumnSpan="2"
-                    Margin="0,8,0,0"
-                    Orientation="Horizontal"
-                    Spacing="0">
+        <Grid Grid.Row="1"
+              Grid.Column="1"
+              Grid.ColumnSpan="2"
+              Margin="0,4,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
             <Border Margin="0,0,12,0"
-                    Padding="10,4"
+                    Padding="6,2"
+                    VerticalAlignment="Center"
                     Background="{ThemeResource P2PGradientBrush}"
-                    CornerRadius="10"
+                    CornerRadius="8"
                     Visibility="{Binding IsDecentralized}">
                 <TextBlock x:Uid="P2PLabel"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
                            FontSize="10"
-                           Foreground="{ThemeResource TextFillColorPrimaryBrush}" />
+                           Foreground="{ThemeResource TextFillColorPrimaryBrush}"
+                           TextAlignment="Center" />
             </Border>
 
-            <TextBlock VerticalAlignment="Center"
-                       FontSize="16"
-                       MaxLines="1"
-                       TextTrimming="CharacterEllipsis">
-                <Run FontWeight="SemiBold" Text="{Binding MessageSubject}" />
-                <Run Text="   " />
-                <Run FontSize="15"
-                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                     Text="{Binding PreviewText, Mode=OneWay}" />
-            </TextBlock>
-        </StackPanel>
+            <TextBlock Grid.Column="1"
+                       VerticalAlignment="Center"
+                       Style="{Binding IsMarkedAsRead, Converter={StaticResource InverseBoolToAccentTextBlockStyleConverter}}"
+                       Text="{Binding MessageSubject}"
+                       TextTrimming="CharacterEllipsis"
+                       TextWrapping="NoWrap" />
+            <TextBlock Grid.Column="2"
+                       Margin="8,0,0,0"
+                       VerticalAlignment="Center"
+                       Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                       Text="{Binding PreviewText, Mode=OneWay}"
+                       TextTrimming="CharacterEllipsis"
+                       TextWrapping="NoWrap" />
+        </Grid>
 
         <StackPanel x:Name="MetadataPanel"
-                    Grid.Row="0"
-                    Grid.RowSpan="2"
                     Grid.Column="3"
                     Margin="12,0,0,0"
-                    VerticalAlignment="Top"
+                    VerticalAlignment="Center"
                     Orientation="Horizontal"
                     Spacing="12">
 
@@ -151,16 +154,13 @@
                     Visibility="{Binding HasAttachments, Mode=OneWay}">
                 <StackPanel Orientation="Horizontal" Spacing="8">
                     <SymbolIcon Symbol="Attach" />
-                    <TextBlock VerticalAlignment="Center"
-                               FontSize="14"
-                               Text="{Binding AttachmentCount}" />
+                    <TextBlock VerticalAlignment="Center" Text="{Binding AttachmentCount}" />
                 </StackPanel>
             </Border>
 
             <StackPanel Orientation="Horizontal" Spacing="8">
                 <TextBlock x:Uid="MessageTo"
                            VerticalAlignment="Center"
-                           FontSize="12"
                            Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
                 <Border Height="32"
                         Padding="4,0"
@@ -172,11 +172,9 @@
                                        Height="24"
                                        DisplayName="{Binding Email.DisplayName, Mode=OneWay}" />
                         <TextBlock VerticalAlignment="Center"
-                                   FontSize="14"
                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                                    Text="{Binding Email.Name}" />
                         <TextBlock VerticalAlignment="Center"
-                                   FontSize="14"
                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                                    Visibility="{Binding AdditionalRecipientCount, Converter={StaticResource IntToVisibilityConverter}}">
                             <Run Text="+" /><Run Text="{Binding AdditionalRecipientCount}" />
@@ -187,7 +185,6 @@
 
             <TextBlock MinWidth="96"
                        VerticalAlignment="Center"
-                       FontSize="16"
                        Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                        Text="{Binding DateBriefString}"
                        TextAlignment="Right" />

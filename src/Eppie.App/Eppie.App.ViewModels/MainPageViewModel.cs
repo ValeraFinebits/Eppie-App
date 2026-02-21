@@ -95,6 +95,27 @@ namespace Tuvi.App.ViewModels
             }
         }
 
+        public string SenderName
+        {
+            get
+            {
+                var firstSender = _message.From?.FirstOrDefault();
+                if (firstSender == null)
+                {
+                    return string.Empty;
+                }
+
+                if (!string.IsNullOrWhiteSpace(firstSender.Name))
+                {
+                    return firstSender.Name;
+                }
+
+                var address = firstSender.Address;
+                var idx = address?.IndexOfAny(new[] { '+', '@' }) ?? -1;
+                return idx >= 0 ? address.Substring(0, idx) : (address ?? string.Empty);
+            }
+        }
+
         public string MessageReceiver
         {
             get
