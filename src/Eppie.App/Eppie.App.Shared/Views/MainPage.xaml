@@ -245,7 +245,13 @@
 
                     </Grid>
                 </SplitView.Pane>
-                <Frame x:Name="contentFrame" />
+                <Frame x:Name="contentFrame">
+                    <Frame.ContentTransitions>
+                        <TransitionCollection>
+                            <NavigationThemeTransition />
+                        </TransitionCollection>
+                    </Frame.ContentTransitions>
+                </Frame>
             </SplitView>
 
         </winui:NavigationView>

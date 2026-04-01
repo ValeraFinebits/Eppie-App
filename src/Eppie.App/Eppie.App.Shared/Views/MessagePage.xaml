@@ -111,6 +111,11 @@
     </local:MessagePageBase.Resources>
 
     <Grid>
+        <Grid.ChildrenTransitions>
+            <TransitionCollection>
+                <EntranceThemeTransition />
+            </TransitionCollection>
+        </Grid.ChildrenTransitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" MinWidth="{StaticResource SideAreaMinWidth}" />
             <ColumnDefinition Width="Auto" />
