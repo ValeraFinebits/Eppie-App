@@ -22,11 +22,15 @@ using System.Globalization;
 using System.Diagnostics.CodeAnalysis;
 
 #if WINDOWS_UWP
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media.Animation;
 #else
+using Windows.UI.ViewManagement;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media.Animation;
 #endif
 
 namespace Eppie.App.Services
@@ -81,7 +85,7 @@ namespace Eppie.App.Services
             Type pageType = Type.GetType(pageTypeName);
             if (pageType != null)
             {
-                MainFrame?.Navigate(pageType, parameter);
+                MainFrame?.Navigate(pageType, parameter, GetNavigationTransitionInfo());
             }
         }
 
@@ -93,8 +97,30 @@ namespace Eppie.App.Services
             Type pageType = Type.GetType(pageTypeName);
             if (pageType != null)
             {
-                frame?.Navigate(pageType, parameter);
+                frame?.Navigate(pageType, parameter, GetNavigationTransitionInfo());
             }
+        }
+
+        private static NavigationTransitionInfo GetNavigationTransitionInfo()
+        {
+            try
+            {
+                var uiSettings = new UISettings();
+                if (!uiSettings.AnimationsEnabled)
+                {
+                    return new SuppressNavigationTransitionInfo();
+                }
+            }
+            catch (NotSupportedException)
+            {
+                // UISettings.AnimationsEnabled may not be available on all platforms; fall through to default animation.
+            }
+            catch (NotImplementedException)
+            {
+                // UISettings.AnimationsEnabled may not be implemented on all Uno platform targets; fall through to default animation.
+            }
+
+            return new EntranceNavigationTransitionInfo();
         }
 
         public void ExitApplication()
