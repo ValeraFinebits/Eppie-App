@@ -32,6 +32,8 @@ namespace Eppie.App.ViewModels.Tests.TestDoubles
         private readonly List<Account> _accounts = new();
         public readonly List<Message> SentMessages = new();
         public readonly List<Account> AddedAccounts = new();
+        public readonly List<Message> CreatedDraftMessages = new();
+        public readonly List<Message> UpdatedDraftMessages = new();
 
         public bool ShouldThrowOnSend { get; set; }
 
@@ -308,8 +310,19 @@ namespace Eppie.App.ViewModels.Tests.TestDoubles
         public Task UnflagMessagesAsync(IEnumerable<Message> messages, CancellationToken cancellationToken = default) => throw new NotImplementedException();
         public Task<Message> GetMessageBodyAsync(Message message, CancellationToken cancellationToken = default) => throw new NotImplementedException();
         public Task<Message> GetMessageBodyHighPriorityAsync(Message message, CancellationToken cancellationToken = default) => throw new NotImplementedException();
-        public Task<Message> CreateDraftMessageAsync(Account account, Message message, CancellationToken cancellationToken = default) => throw new NotImplementedException();
-        public Task<Message> UpdateDraftMessageAsync(uint id, Message message, CancellationToken cancellationToken = default) => throw new NotImplementedException();
+        public Task<Message> CreateDraftMessageAsync(Account account, Message message, CancellationToken cancellationToken = default)
+        {
+            CreatedDraftMessages.Add(message);
+            message.Id = 1;
+            message.Folder = new Folder { Account = account };
+            return Task.FromResult(message);
+        }
+        public Task<Message> UpdateDraftMessageAsync(uint id, Message message, CancellationToken cancellationToken = default)
+        {
+            UpdatedDraftMessages.Add(message);
+            message.Id = id;
+            return Task.FromResult(message);
+        }
         public Task MoveMessagesAsync(IReadOnlyList<Message> messages, CompositeFolder targetFolder, CancellationToken cancellationToken = default) => throw new NotImplementedException();
         public Task UpdateMessageProcessingResultAsync(Message message, string result, CancellationToken cancellationToken = default) => throw new NotImplementedException();
         public Task<bool> ClaimDecentralizedNameAsync(string name, EmailAddress address, CancellationToken cancellationToken = default) => throw new NotImplementedException();

@@ -30,6 +30,7 @@ namespace Eppie.App.ViewModels
 {
     public class BaseMessageViewModel : PageViewModel
     {
+        private bool _skipSaveOnNavigatedFrom;
         private MessageInfo _messageInfo;
         public MessageInfo MessageInfo
         {
@@ -92,12 +93,32 @@ namespace Eppie.App.ViewModels
         {
             try
             {
+                _skipSaveOnNavigatedFrom = false;
                 await InitializeAIButtonAsync().ConfigureAwait(true);
 
                 base.OnNavigatedTo(data);
             }
             catch (Exception e)
             {
+                OnError(e);
+            }
+        }
+
+        public override async void OnNavigatedFrom()
+        {
+            if (_skipSaveOnNavigatedFrom)
+            {
+                return;
+            }
+
+            try
+            {
+                _skipSaveOnNavigatedFrom = true;
+                await SaveDraftIfNeededAsync().ConfigureAwait(true);
+            }
+            catch (Exception e)
+            {
+                _skipSaveOnNavigatedFrom = false;
                 OnError(e);
             }
         }
@@ -221,10 +242,12 @@ namespace Eppie.App.ViewModels
                     await SaveDraftIfNeededAsync().ConfigureAwait(true);
                 }
 
+                _skipSaveOnNavigatedFrom = true;
                 NavigationService?.GoBack();
             }
             catch (Exception e)
             {
+                _skipSaveOnNavigatedFrom = false;
                 CanGoBack = true;
                 OnError(e);
             }
